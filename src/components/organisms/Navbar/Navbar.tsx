@@ -12,15 +12,20 @@ import {
   FiSearch,
   FiSettings,
   FiUserPlus,
-  FiChevronRight
+  FiChevronRight,
 } from "react-icons/fi";
 import "./styles/Navbar.css";
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { logOut } from "../../../firebase/FirebaseConfig";
 
 export interface NavbarInterface {}
 
 const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
   const [menu, setMenu] = useState<string>("sidebarToggle");
+
+  const handleLogout = async () => {
+    await logOut().then(() => console.log("Sesion cerrada"));
+  };
   return (
     <nav className="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white">
       <button
@@ -58,14 +63,14 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           <a
             className="nav-link dropdown-toggle"
             id="navbarDropdownDocs"
-            href="javascript:void(0);"
+            // href="javascript:void(0);"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
             <div className="fw-500">Documentation</div>
-            <FiChevronRight/>
+            <FiChevronRight />
           </a>
           <div
             className="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up"
@@ -150,20 +155,20 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           <a
             className="btn btn-icon btn-transparent-dark dropdown-toggle"
             id="navbarDropdownAlerts"
-            href="javascript:void(0);"
+            // href="javascript:void(0);"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <FiBell/>
+            <FiBell />
           </a>
           <div
             className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
             aria-labelledby="navbarDropdownAlerts"
           >
             <h6 className="dropdown-header dropdown-notifications-header">
-              <FiBell color="#fff" className="me-2"/>
+              <FiBell color="#fff" className="me-2" />
               Alerts Center
             </h6>
             <a className="dropdown-item dropdown-notifications-item" href="#!">
@@ -182,7 +187,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             </a>
             <a className="dropdown-item dropdown-notifications-item" href="#!">
               <div className="dropdown-notifications-item-icon bg-info">
-                <FiBarChart/>
+                <FiBarChart />
               </div>
               <div className="dropdown-notifications-item-content">
                 <div className="dropdown-notifications-item-content-details">
@@ -208,7 +213,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             </a>
             <a className="dropdown-item dropdown-notifications-item" href="#!">
               <div className="dropdown-notifications-item-icon bg-success">
-                <FiUserPlus/>
+                <FiUserPlus />
               </div>
               <div className="dropdown-notifications-item-content">
                 <div className="dropdown-notifications-item-content-details">
@@ -232,20 +237,20 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           <a
             className="btn btn-icon btn-transparent-dark dropdown-toggle"
             id="navbarDropdownMessages"
-            href="javascript:void(0);"
+            // href="javascript:void(0);"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <FiMail/>
+            <FiMail />
           </a>
           <div
             className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
             aria-labelledby="navbarDropdownMessages"
           >
             <h6 className="dropdown-header dropdown-notifications-header">
-              <FiMail className="me-2"/>
+              <FiMail className="me-2" />
               Message Center
             </h6>
             <a className="dropdown-item dropdown-notifications-item" href="#!">
@@ -344,7 +349,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           <a
             className="btn btn-icon btn-transparent-dark dropdown-toggle"
             id="navbarDropdownUserImage"
-            href="javascript:void(0);"
+            // href="javascript:void(0);"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
@@ -352,7 +357,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           >
             <img
               className="img-fluid"
-              src="assets/img/illustrations/profiles/profile-1.png"
+              src="https://source.unsplash.com/random"
             />
           </a>
           <div
@@ -372,16 +377,16 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             <div className="dropdown-divider"></div>
             <a className="dropdown-item" href="#!">
               <div className="dropdown-item-icon">
-                <FiSettings/>
+                <FiSettings />
               </div>
               Account
             </a>
-            <a className="dropdown-item" href="#!">
+            <button className="dropdown-item" onClick={handleLogout}>
               <div className="dropdown-item-icon">
-                <FiLogOut/>
+                <FiLogOut />
               </div>
               Logout
-            </a>
+            </button>
           </div>
         </li>
       </ul>

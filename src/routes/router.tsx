@@ -1,28 +1,53 @@
-import App from '@/App'
-import { LayoutPublic } from '@/components/organisms/LayoutPublic'
-import { LayoutThree } from '@/components/organisms/LayoutThree'
-import { LayoutTwo } from '@/components/organisms/LayoutTwo'
-import { NotFound } from '@/pages/NotFound'
-import { createBrowserRouter } from 'react-router-dom'
+import App from "@/App";
+import {
+  RootLayout,
+  LayoutPublic,
+  LayoutTwo,
+  LayoutThree,
+} from "@/components/organisms";
+import { PrivateLayout } from "@/components/organisms/PrivateLayout";
+import { Login, Register } from "@/pages/Auth";
+import { NotFound } from "@/pages/NotFound";
+import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App/>,
-    errorElement: <NotFound/>,
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
-        element: <LayoutPublic/>
+        element: <Login />,
       },
       {
-        path:'dashboard-1',
-        element: <LayoutTwo/>
+        path: "register",
+        element: <Register />,
       },
       {
-        path:'dashboard-2',
-        element: <LayoutThree/>
-      }
-    ]
-  }
-])
+        path: "dashboard",
+        element: <PrivateLayout />,
+        children: [
+          {
+            path: '/dashboard',
+            element: <App />,
+            children: [
+              {
+                path: "dashboard-1",
+                element: <LayoutPublic />,
+              },
+              {
+                path: "dashboard-2",
+                element: <LayoutTwo />,
+              },
+              {
+                path: "dashboard-3",
+                element: <LayoutThree />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]);

@@ -1,13 +1,13 @@
 import { Navbar, Sidebar } from "@/components/organisms";
-// import './App.css';s
-
+import { Outlet } from "react-router-dom";
 function App(): JSX.Element {
   return (
     <>
       <Navbar />
+      <Outlet></Outlet>
       <Sidebar />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

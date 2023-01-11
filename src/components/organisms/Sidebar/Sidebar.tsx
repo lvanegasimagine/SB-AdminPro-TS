@@ -16,7 +16,7 @@ const Sidebar: React.FC<SidebarInterface> = () => {
                 <div className="sidenav-menu-heading d-sm-none">Account</div>
                 <a className="nav-link d-sm-none" href="#!">
                   <div className="nav-link-icon">
-                    <FiBell/>
+                    <FiBell />
                   </div>
                   Alerts
                   <span className="badge bg-warning-soft text-warning ms-auto">
@@ -35,14 +35,14 @@ const Sidebar: React.FC<SidebarInterface> = () => {
                 <div className="sidenav-menu-heading">Core</div>
                 <a
                   className="nav-link collapsed"
-                  href="javascript:void(0);"
+                  // href="javascript:void(0);"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseDashboards"
                   aria-expanded="false"
                   aria-controls="collapseDashboards"
                 >
                   <div className="nav-link-icon">
-                    <FiActivity/>
+                    <FiActivity />
                   </div>
                   Dashboards
                   <div className="sidenav-collapse-arrow">
@@ -82,7 +82,9 @@ const Sidebar: React.FC<SidebarInterface> = () => {
             </div>
           </nav>
         </div>
-        <Outlet />
+        <div id="layoutSidenav_content">
+          <Outlet />
+        </div>
       </div>
     </>
   );

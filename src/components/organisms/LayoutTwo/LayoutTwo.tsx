@@ -4,7 +4,7 @@ export interface LayoutTwoInterface {}
 
 const LayoutTwo: React.FC<LayoutTwoInterface> = () => {
   return (
-    <div id="layoutSidenav_content">
+    <>
       <main>
         <header className="page-header page-header-dark bg-gradient-primary-to-secondary pb-10">
           <div className="container-xl px-4">
@@ -1765,7 +1765,7 @@ const LayoutTwo: React.FC<LayoutTwoInterface> = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 
