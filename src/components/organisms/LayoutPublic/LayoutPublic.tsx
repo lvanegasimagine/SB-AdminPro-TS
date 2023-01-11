@@ -4,7 +4,7 @@ export interface LayoutPublicInterface { }
 
 const LayoutPublic = (): JSX.Element => {
 	return (
-		<div id="layoutSidenav_content">
+		<>
 			<main>
 				<header className="py-10 mb-4 bg-gradient-primary-to-secondary">
 					<div className="container-xl px-4">
@@ -448,7 +448,7 @@ const LayoutPublic = (): JSX.Element => {
 					</div>
 				</div>
 			</footer>
-		</div>
+		</>
 	)
 };
 

@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
             element: <App />,
             children: [
               {
-                path: "dashboard-1",
+                index: true,
                 element: <LayoutPublic />,
               },
               {
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
             ],
           },
         ],
-      },
+      }
     ],
   },
 ]);

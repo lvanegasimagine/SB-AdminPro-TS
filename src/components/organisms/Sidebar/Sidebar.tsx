@@ -58,14 +58,11 @@ const Sidebar: React.FC<SidebarInterface> = () => {
                     className="sidenav-menu-nested nav accordion"
                     id="accordionSidenavPages"
                   >
-                    <NavLink className="nav-link" to="dashboard-1">
-                      Dashboard 1
+                    <NavLink className="nav-link" to="dashboard-2">
+                      Pantalla 2
                       <span className="badge bg-primary-soft text-primary ms-auto">
                         Updated
                       </span>
-                    </NavLink>
-                    <NavLink className="nav-link" to="dashboard-2">
-                      Dashboard 2
                     </NavLink>
                     <NavLink className="nav-link" to="dashboard-3">
                       Dashboard 3

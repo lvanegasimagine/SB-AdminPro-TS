@@ -5,7 +5,7 @@ export interface LayoutThreeInterface {}
 
 const LayoutThree: React.FC<LayoutThreeInterface> = () => {
   return (
-    <div id="layoutSidenav_content">
+    <>
       <main>
         <header className="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
           <div className="container-fluid px-4">
@@ -104,7 +104,7 @@ const LayoutThree: React.FC<LayoutThreeInterface> = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 
