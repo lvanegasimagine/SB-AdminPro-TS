@@ -1,8 +1,11 @@
-import React from 'react';
+import { UserContext } from '@/context';
+import { UserContextProvider } from '@/types';
+import React, {useContext} from 'react';
 import './styles/LayoutPublic.css';
 export interface LayoutPublicInterface { }
 
 const LayoutPublic = (): JSX.Element => {
+	const {user}: any = useContext(UserContext) as UserContextProvider;
 	return (
 		<>
 			<main>

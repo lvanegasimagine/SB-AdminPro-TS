@@ -35,7 +35,6 @@ const Sidebar: React.FC<SidebarInterface> = () => {
                 <div className="sidenav-menu-heading">Core</div>
                 <a
                   className="nav-link collapsed"
-                  // href="javascript:void(0);"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseDashboards"
                   aria-expanded="false"

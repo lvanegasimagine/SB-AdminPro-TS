@@ -1,5 +1,5 @@
 import React from "react";
-import { FiBell } from "react-icons/fi";
+import { FiGlobe, FiUser } from "react-icons/fi";
 import "./styles/LayoutThree.css";
 export interface LayoutThreeInterface {}
 
@@ -14,24 +14,18 @@ const LayoutThree: React.FC<LayoutThreeInterface> = () => {
                 <div className="col-auto mb-3">
                   <h1 className="page-header-title">
                     <div className="page-header-icon">
-                      <i data-feather="globe"></i>
+                      <FiGlobe />
                     </div>
                     Organization Details
                   </h1>
                 </div>
                 <div className="col-12 col-xl-auto mb-3">
-                  <a
-                    className="btn btn-sm btn-light text-primary"
-                    href="user-management-list.html"
-                  >
-                    <i className="me-1" data-feather="user"></i>
+                  <a className="btn btn-sm btn-light text-primary">
+                    <FiUser className="me-1" />
                     Manage Users
                   </a>
-                  <a
-                    className="btn btn-sm btn-light text-primary"
-                    href="user-management-groups-list.html"
-                  >
-                    <i className="me-1" data-feather="users"></i>
+                  <a className="btn btn-sm btn-light text-primary">
+                    <FiUser className="me-1" />
                     Manage Groups
                   </a>
                 </div>

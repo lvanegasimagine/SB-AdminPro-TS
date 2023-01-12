@@ -4,6 +4,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 
 import { IUserLoginAndRegister } from "@/interface";
@@ -25,7 +28,27 @@ export const auth = getAuth(app);
 export const login = ({ email, password }: IUserLoginAndRegister) =>
   signInWithEmailAndPassword(auth, email, password);
 
-export const register = ({ email, password }: IUserLoginAndRegister) =>
-  createUserWithEmailAndPassword(auth, email, password);
+export const register = ({
+  email,
+  password,
+  displayName,
+}: IUserLoginAndRegister) => {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      alert("Usuario Registrado");
+      changeUserName(auth, displayName);
+    })
+    .catch((err) => console.log("Error Creando la cuenta", err));
+};
+
+const changeUserName = (auth: any, displayName: string) => {
+  updateProfile(auth.currentUser, {
+    displayName: displayName,
+  }).catch((_) => console.error("Error al asignar el nombre de usuario"));
+};
+export const loginWithGoogle = () => {
+  const googleProvider = new GoogleAuthProvider();
+  return signInWithPopup(auth, googleProvider);
+};
 
 export const logOut = () => signOut(auth);

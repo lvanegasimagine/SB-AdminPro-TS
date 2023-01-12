@@ -4,6 +4,7 @@ import {
   LayoutPublic,
   LayoutTwo,
   LayoutThree,
+  Account,
 } from "@/components/organisms";
 import { PrivateLayout } from "@/components/organisms/PrivateLayout";
 import { Login, Register } from "@/pages/Auth";
@@ -43,6 +44,9 @@ export const router = createBrowserRouter([
               {
                 path: "dashboard-3",
                 element: <LayoutThree />,
+              },{
+                path: "account",
+                element: <Account />,
               },
             ],
           },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   FiActivity,
   FiAlignLeft,
@@ -17,10 +17,14 @@ import {
 import "./styles/Navbar.css";
 import { NavLink } from "react-router-dom";
 import { logOut } from "../../../firebase/FirebaseConfig";
+import { UserContext } from "@/context";
+import { UserContextProvider } from "@/types";
 
 export interface NavbarInterface {}
 
 const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
+  const { user }: any = useContext(UserContext) as UserContextProvider;
+
   const [menu, setMenu] = useState<string>("sidebarToggle");
 
   const handleLogout = async () => {
@@ -63,14 +67,14 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           <a
             className="nav-link dropdown-toggle"
             id="navbarDropdownDocs"
-            // href="javascript:void(0);"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <div className="fw-500">Documentation</div>
-            <FiChevronRight />
+            <div className="fw-500">Documentation
+            <FiChevronRight style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center'}}/>
+            </div>
           </a>
           <div
             className="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up"
@@ -357,7 +361,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           >
             <img
               className="img-fluid"
-              src="https://source.unsplash.com/random"
+              src={user ? user?.photoURL : "https://source.unsplash.com/random"}
             />
           </a>
           <div
@@ -367,20 +371,20 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             <h6 className="dropdown-header d-flex align-items-center">
               <img
                 className="dropdown-user-img"
-                src="assets/img/illustrations/profiles/profile-1.png"
+                src={user && user.photoURL}
               />
               <div className="dropdown-user-details">
-                <div className="dropdown-user-details-name">Valerie Luna</div>
-                <div className="dropdown-user-details-email">vluna@aol.com</div>
+                <div className="dropdown-user-details-name">{user ? user.displayName : 'Valerie Luna'}</div>
+                <div className="dropdown-user-details-email">{user ? user.email: 'vluna@aol.com'}</div>
               </div>
             </h6>
             <div className="dropdown-divider"></div>
-            <a className="dropdown-item" href="#!">
+            <NavLink className="dropdown-item" to="account">
               <div className="dropdown-item-icon">
                 <FiSettings />
               </div>
               Account
-            </a>
+            </NavLink>
             <button className="dropdown-item" onClick={handleLogout}>
               <div className="dropdown-item-icon">
                 <FiLogOut />

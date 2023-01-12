@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Formik } from "formik";
-import { register } from "@/firebase/FirebaseConfig";
+import { loginWithGoogle, register } from "@/firebase/FirebaseConfig";
 import { useRedirectActiveUser } from "@/hooks/useRedirectActiveUser";
 import { NavLink } from "react-router-dom";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
@@ -8,22 +8,20 @@ import { UserContext } from "@/context/UserContext";
 import { UserContextProvider } from "@/types";
 import * as Yup from "yup";
 import "./styles/Register.css";
+import { IRegisterValue } from "@/interface";
 
 export interface RegisterInterface {}
 
-interface MyFormValues {
-  email: string;
-  password: string;
-}
 
 const Register: React.FC<RegisterInterface> = (): JSX.Element => {
   const { user } = useContext(UserContext) as UserContextProvider;
+
   useRedirectActiveUser(user, "/dashboard");
 
   const onSubmit = async (values: any, actions: any) => {
     try {
-      console.log(values.email, values.password);
-      await register({ email: values.email, password: values.password });
+      const displayName = values?.name + " " + values?.surname;
+      register({ email: values.email, password: values.password, displayName: displayName });
       console.log("user logged in");
       actions.resetForm();
     } catch (error: any) {
@@ -38,14 +36,22 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
   };
 
   const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    surname: Yup.string().required("Surname is required"),
     email: Yup.string().email().required(),
     password: Yup.string().trim().min(6).required(),
   });
 
-  const initialValues: MyFormValues = {
+  const initialValues: IRegisterValue = {
+    name: "Luis",
+    surname: "Vanegas",
     email: "lvanegas1429@gmail.com",
     password: "123456789",
   };
+
+  const handleGoogleSignIn = async () => {
+      await loginWithGoogle();
+   }
 
   return (
     <div id="layoutAuthentication">
@@ -66,9 +72,9 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                     <a className="btn btn-icon btn-github mx-1" href="#!">
                       <FaGithub />
                     </a>
-                    <a className="btn btn-icon btn-google mx-1" href="#!">
+                    <button type="button" className="btn btn-icon btn-google mx-1" onClick={handleGoogleSignIn}>
                       <FaGoogle />
-                    </a>
+                    </button>
                     <a className="btn btn-icon btn-twitter mx-1" href="#!">
                       <FaTwitter />
                     </a>
@@ -108,8 +114,13 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                                   placeholder=""
                                   aria-label="First Name"
                                   aria-describedby="firstNameExample"
+                                  value={values.name}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  name="name"
                                 />
                               </div>
+                              {errors.name && touched.name && errors.name}
                             </div>
                             <div className="col-md-6">
                               <div className="mb-3">
@@ -125,8 +136,13 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                                   placeholder=""
                                   aria-label="Last Name"
                                   aria-describedby="lastNameExample"
+                                  value={values.surname}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  name="surname"
                                 />
                               </div>
+                              {errors.surname && touched.surname && errors.surname}
                             </div>
                           </div>
                           <div className="mb-3">
