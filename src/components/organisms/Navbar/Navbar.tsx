@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   FiActivity,
   FiAlignLeft,
@@ -16,20 +16,49 @@ import {
 } from "react-icons/fi";
 import "./styles/Navbar.css";
 import { NavLink } from "react-router-dom";
-import { logOut } from "../../../firebase/FirebaseConfig";
+import { logOut, upload } from "@/firebase/FirebaseConfig";
 import { UserContext } from "@/context";
 import { UserContextProvider } from "@/types";
+import { useAuth } from "@/hooks/useAuth";
 
-export interface NavbarInterface {}
+export interface NavbarInterface { 
+  // setReloadApp: React.Dispatch<React.SetStateAction<undefined>>
+}
 
 const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
-  const { user }: any = useContext(UserContext) as UserContextProvider;
 
+  const currentUser: any = useAuth();
+  const { user, setUser }: any = useContext(UserContext) as UserContextProvider;
+  const [photoURL, setPhotoURL] = useState('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png')
   const [menu, setMenu] = useState<string>("sidebarToggle");
+  const [photo, setPhoto] = useState('null');
+  const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    (async () => {
+      if (currentUser?.photoURL) {
+        await setPhotoURL(currentUser.photoURL);
+      }
+    })();
+  }, [currentUser])
+
+  function handleChange(e: any) {
+    if (e.target.files[0]) {
+      setPhoto(e.target.files[0])
+    }
+  }
+
+  function handleClick() {
+    upload(photo, currentUser, setLoading).then(() => {
+      setLoading(false);
+      setUser(!user);
+    })
+  }
 
   const handleLogout = async () => {
     await logOut().then(() => console.log("Sesion cerrada"));
   };
+
   return (
     <nav className="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white">
       <button
@@ -73,7 +102,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             aria-expanded="false"
           >
             <div className="fw-500">Documentation
-            <FiChevronRight style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center'}}/>
+              <FiChevronRight style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center' }} />
             </div>
           </a>
           <div
@@ -361,7 +390,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
           >
             <img
               className="img-fluid"
-              src={user ? user?.photoURL : "https://source.unsplash.com/random"}
+              src={photoURL}
             />
           </a>
           <div
@@ -371,11 +400,13 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             <h6 className="dropdown-header d-flex align-items-center">
               <img
                 className="dropdown-user-img"
-                src={user && user.photoURL}
+                src={photoURL}
               />
               <div className="dropdown-user-details">
                 <div className="dropdown-user-details-name">{user ? user.displayName : 'Valerie Luna'}</div>
-                <div className="dropdown-user-details-email">{user ? user.email: 'vluna@aol.com'}</div>
+                <div className="dropdown-user-details-email">{user ? user.email : 'vluna@aol.com'}</div>
+                <input type="file" onChange={handleChange} />
+                <button disabled={loading || !photo} onClick={handleClick}>Upload</button>
               </div>
             </h6>
             <div className="dropdown-divider"></div>

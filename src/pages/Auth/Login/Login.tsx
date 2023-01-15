@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { UserContext } from "@/context";
-import { login } from "@/firebase/FirebaseConfig";
+import { login, loginWithGoogle } from "@/firebase/FirebaseConfig";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import * as Yup from "yup";
 import { UserContextProvider } from "@/types";
@@ -69,9 +69,9 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
                     <a className="btn btn-icon btn-github mx-1" href="#!">
                       <FaGithub />
                     </a>
-                    <a className="btn btn-icon btn-google mx-1" href="#!">
+                    <button type="button" className="btn btn-icon btn-google mx-1" onClick={async () => await loginWithGoogle()}>
                       <FaGoogle />
-                    </a>
+                    </button>
                     <a className="btn btn-icon btn-twitter mx-1" href="#!">
                       <FaTwitter />
                     </a>

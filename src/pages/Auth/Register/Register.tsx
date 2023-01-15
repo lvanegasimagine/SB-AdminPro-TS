@@ -1,27 +1,42 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Formik } from "formik";
-import { loginWithGoogle, register } from "@/firebase/FirebaseConfig";
+import { loginWithGoogle, register, changeUserName, sendVerificationEmail, auth } from "@/firebase/FirebaseConfig";
 import { useRedirectActiveUser } from "@/hooks/useRedirectActiveUser";
 import { NavLink } from "react-router-dom";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import { UserContext } from "@/context/UserContext";
 import { UserContextProvider } from "@/types";
+import { IRegisterValue } from "@/interface";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import * as Yup from "yup";
 import "./styles/Register.css";
-import { IRegisterValue } from "@/interface";
 
 export interface RegisterInterface {}
 
-
 const Register: React.FC<RegisterInterface> = (): JSX.Element => {
-  const { user } = useContext(UserContext) as UserContextProvider;
+  const { user, setUser } = useContext(UserContext) as UserContextProvider;
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
 
-  useRedirectActiveUser(user, "/dashboard");
+  useRedirectActiveUser(user, "/");
 
   const onSubmit = async (values: any, actions: any) => {
     try {
       const displayName = values?.name + " " + values?.surname;
-      register({ email: values.email, password: values.password, displayName: displayName });
+      await register({
+        email: values.email,
+        password: values.password,
+        displayName: displayName,
+      })
+      .then(() => {
+        changeUserName(auth, displayName).then(() => {
+          console.log('actualizado')
+          setUser(!user);
+        });
+        sendVerificationEmail(auth);
+      })
+      .catch((err) => console.log("Error Creando la cuenta", err));
       console.log("user logged in");
       actions.resetForm();
     } catch (error: any) {
@@ -40,6 +55,13 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
     surname: Yup.string().required("Surname is required"),
     email: Yup.string().email().required(),
     password: Yup.string().trim().min(6).required(),
+    confirmPassword: Yup.string()
+      .trim()
+      .min(6)
+      .required()
+      .label("confirm password")
+      .required()
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });
 
   const initialValues: IRegisterValue = {
@@ -47,11 +69,20 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
     surname: "Vanegas",
     email: "lvanegas1429@gmail.com",
     password: "123456789",
+    confirmPassword: "123456789",
   };
 
   const handleGoogleSignIn = async () => {
-      await loginWithGoogle();
-   }
+    await loginWithGoogle();
+  };
+
+  const handlePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   return (
     <div id="layoutAuthentication">
@@ -72,7 +103,11 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                     <a className="btn btn-icon btn-github mx-1" href="#!">
                       <FaGithub />
                     </a>
-                    <button type="button" className="btn btn-icon btn-google mx-1" onClick={handleGoogleSignIn}>
+                    <button
+                      type="button"
+                      className="btn btn-icon btn-google mx-1"
+                      onClick={handleGoogleSignIn}
+                    >
                       <FaGoogle />
                     </button>
                     <a className="btn btn-icon btn-twitter mx-1" href="#!">
@@ -120,7 +155,9 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                                   name="name"
                                 />
                               </div>
-                              {errors.name && touched.name && errors.name}
+                              <div className="invalid-feedback">
+                                {errors.name && touched.name && errors.name}
+                              </div>
                             </div>
                             <div className="col-md-6">
                               <div className="mb-3">
@@ -142,7 +179,9 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                                   name="surname"
                                 />
                               </div>
-                              {errors.surname && touched.surname && errors.surname}
+                              {errors.surname &&
+                                touched.surname &&
+                                errors.surname}
                             </div>
                           </div>
                           <div className="mb-3">
@@ -170,44 +209,70 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                               <div className="mb-3">
                                 <label
                                   className="text-gray-600 small"
-                                  htmlFor="passwordExample"
+                                  htmlFor="confirmPasswordExample"
                                 >
                                   Password
                                 </label>
-                                <input
-                                  className="form-control form-control-solid"
-                                  type="password"
-                                  placeholder=""
-                                  aria-label="Password"
-                                  aria-describedby="passwordExample"
-                                  value={values.password}
-                                  onChange={handleChange}
-                                  name="password"
-                                  onBlur={handleBlur}
-                                />
+                                <div className="input-group input-group-joined input-group-solid">
+                                  <input
+                                    className="form-control pe-0"
+                                    type={showPassword ? "text" : "password"}
+                                    aria-label="Password"
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    name="password"
+                                    onBlur={handleBlur}
+                                  />
+                                  <span className="input-group-text">
+                                    {showPassword ? (
+                                      <FiEye onClick={handlePassword} />
+                                    ) : (
+                                      <FiEyeOff onClick={handlePassword} />
+                                    )}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                             {errors.password &&
                               touched.password &&
                               errors.password}
                             <div className="col-md-6">
-                              {/* <div className="mb-3">
+                              <div className="mb-3">
                                 <label
                                   className="text-gray-600 small"
                                   htmlFor="confirmPasswordExample"
                                 >
                                   Confirm Password
                                 </label>
-                                <input
-                                  className="form-control form-control-solid"
-                                  type="password"
-                                  placeholder=""
-                                  aria-label="Confirm Password"
-                                  aria-describedby="confirmPasswordExample"
-                                />
-                              </div> */}
+                                <div className="input-group input-group-joined input-group-solid">
+                                  <input
+                                    className="form-control pe-0"
+                                    type={
+                                      showConfirmPassword ? "text" : "password"
+                                    }
+                                    placeholder="Input group append..."
+                                    aria-label="Search"
+                                    value={values.confirmPassword}
+                                    onChange={handleChange}
+                                    name="confirmPassword"
+                                    onBlur={handleBlur}
+                                  />
+                                  <span className="input-group-text">
+                                    {showConfirmPassword ? (
+                                      <FiEye onClick={handleConfirmPassword} />
+                                    ) : (
+                                      <FiEyeOff
+                                        onClick={handleConfirmPassword}
+                                      />
+                                    )}
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </div>
+                          {errors.confirmPassword &&
+                            touched.confirmPassword &&
+                            errors.confirmPassword}
                           <div className="d-flex align-items-center justify-content-between">
                             <div className="form-check">
                               <input
@@ -224,7 +289,11 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                                 <a href="#!"> terms &amp; conditions</a>.
                               </label>
                             </div>
-                            <button className="btn btn-primary" type="submit" disabled={isSubmitting}>
+                            <button
+                              className="btn btn-primary"
+                              type="submit"
+                              disabled={isSubmitting}
+                            >
                               Create Account
                             </button>
                           </div>

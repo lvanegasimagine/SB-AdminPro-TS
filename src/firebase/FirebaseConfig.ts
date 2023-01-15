@@ -7,9 +7,12 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
+  Auth,
+  sendEmailVerification,
 } from "firebase/auth";
-
-import { IUserLoginAndRegister } from "@/interface";
+import { FirebaseStorage, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { IUserLogin, IUserRegister } from "@/interface";
+import { useRedirectActiveUser } from "@/hooks/useRedirectActiveUser";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -22,33 +25,42 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+export const auth: Auth = getAuth(app);
+export const storage: FirebaseStorage = getStorage();
 
-export const auth = getAuth(app);
-
-export const login = ({ email, password }: IUserLoginAndRegister) =>
+export const login = ({ email, password }: IUserLogin) =>
   signInWithEmailAndPassword(auth, email, password);
 
 export const register = ({
   email,
   password,
-  displayName,
-}: IUserLoginAndRegister) => {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("Usuario Registrado");
-      changeUserName(auth, displayName);
-    })
-    .catch((err) => console.log("Error Creando la cuenta", err));
+}: IUserRegister) => {
+  return createUserWithEmailAndPassword(auth, email, password)
 };
 
-const changeUserName = (auth: any, displayName: string) => {
-  updateProfile(auth.currentUser, {
+export const changeUserName = (auth: any, displayName: string) => {
+  return updateProfile(auth.currentUser, {
     displayName: displayName,
-  }).catch((_) => console.error("Error al asignar el nombre de usuario"));
+  })
 };
+
+export const sendVerificationEmail = (auth: any) => {
+  return sendEmailVerification(auth.currentUser).then((_) => console.log('todo bien'));
+};
+
 export const loginWithGoogle = () => {
   const googleProvider = new GoogleAuthProvider();
   return signInWithPopup(auth, googleProvider);
 };
 
 export const logOut = () => signOut(auth);
+
+export async function upload(file: any, currentUser: any, setLoading: any) {
+  const fileRef = ref(storage, currentUser.uid + '.png');
+  setLoading(true);
+  
+  const snapshot = await uploadBytes(fileRef, file);
+  const photoURL = await getDownloadURL(fileRef);
+
+  return updateProfile(currentUser, {photoURL});
+}

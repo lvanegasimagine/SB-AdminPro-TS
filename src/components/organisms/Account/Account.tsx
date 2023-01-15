@@ -1,7 +1,7 @@
 import React from "react";
 import Profile1 from '@/assets/profile-1.png';
-import "./styles/Account.css";
 import { FiUser } from "react-icons/fi";
+import './styles/Account.css'
 export interface AccountInterface {}
 
 const Account: React.FC<AccountInterface> = (): JSX.Element => {
@@ -60,7 +60,7 @@ const Account: React.FC<AccountInterface> = (): JSX.Element => {
               </div>
             </div>
             <div className="col-xl-8">
-              <div className="card mb-4">
+              {/* <div className="card mb-4">
                 <div className="card-header">Account Details</div>
                 <div className="card-body">
                   <form>
@@ -173,7 +173,7 @@ const Account: React.FC<AccountInterface> = (): JSX.Element => {
                     </button>
                   </form>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

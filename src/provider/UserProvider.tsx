@@ -13,9 +13,9 @@ export const UserProvider = ({ children }: PropsWithChildren): JSX.Element => {
       setUser(user);
     })
     return unsubscribe;
-  }, [])
+  }, [user])
 
   if(user === false) return <Loader/>
 
-  return <UserContext.Provider value={{user}}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{user, setUser}}>{children}</UserContext.Provider>;
 };

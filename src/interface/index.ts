@@ -1,4 +1,8 @@
-export interface IUserLoginAndRegister {
+export interface IUserLogin {
+  email: string;
+  password: string;
+}
+export interface IUserRegister {
   displayName: string;
   email: string;
   password: string;
@@ -9,4 +13,5 @@ export interface IRegisterValue {
   surname: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
