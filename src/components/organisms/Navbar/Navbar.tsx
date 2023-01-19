@@ -15,7 +15,7 @@ import { UserContext } from "@/context";
 import { UserContextProvider } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { logOut, upload } from "@/services";
-
+import moment from "moment";
 export interface NavbarInterface {
   // setReloadApp: React.Dispatch<React.SetStateAction<undefined>>
 }
@@ -42,6 +42,9 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
       setPhoto(e.target.files[0])
     }
   }
+
+  const dateString = user.metadata.creationTime
+  console.log("🚀 ~ file: Navbar.tsx:47 ~ dateString", dateString)
 
   function handleClick() {
     upload(photo, currentUser, setLoading).then(() => {

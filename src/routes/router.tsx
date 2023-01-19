@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   RootLayout,
 } from "@/components/organisms";
-import { Login, Register } from "@/pages/Auth";
+import { ForgotPassword, Login, Register } from "@/pages/Auth";
 import { NotFound } from "@/pages/NotFound";
 import { PrivateRouter } from "./Private/PrivateRouter";
 
@@ -19,6 +19,10 @@ export const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword/>
       },
       PrivateRouter
     ],

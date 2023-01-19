@@ -130,12 +130,12 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
                           </div>
                           {errors.password && touched.password && errors.password}
                           <div className="mb-3">
-                            <a
+                            <NavLink
                               className="small"
-                              href="auth-password-social.html"
+                              to="forgot-password"
                             >
                               Forgot your password?
-                            </a>
+                            </NavLink>
                           </div>
                           <div className="d-flex align-items-center justify-content-between mb-0">
                             <div className="form-check">

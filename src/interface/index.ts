@@ -20,3 +20,9 @@ export interface MyFormValues {
   email: string;
   password: string;
 }
+
+export interface propsWithFieldFormik {
+  field: any,
+  form?: any,
+  meta: any
+}
