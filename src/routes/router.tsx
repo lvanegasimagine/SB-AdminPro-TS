@@ -1,15 +1,10 @@
-import App from "@/App";
+import { createBrowserRouter } from "react-router-dom";
 import {
   RootLayout,
-  LayoutPublic,
-  LayoutTwo,
-  LayoutThree,
-  Account,
 } from "@/components/organisms";
-import { PrivateLayout } from "@/components/organisms/PrivateLayout";
-import { Login, Register } from "@/pages/Auth";
+import { ForgotPassword, Login, Register } from "@/pages/Auth";
 import { NotFound } from "@/pages/NotFound";
-import { createBrowserRouter } from "react-router-dom";
+import { PrivateRouter } from "./Private/PrivateRouter";
 
 export const router = createBrowserRouter([
   {
@@ -26,32 +21,10 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "dashboard",
-        element: <PrivateLayout />,
-        children: [
-          {
-            path: '/dashboard',
-            element: <App />,
-            children: [
-              {
-                index: true,
-                element: <LayoutPublic />,
-              },
-              {
-                path: "dashboard-2",
-                element: <LayoutTwo />,
-              },
-              {
-                path: "dashboard-3",
-                element: <LayoutThree />,
-              },{
-                path: "account",
-                element: <Account />,
-              },
-            ],
-          },
-        ],
-      }
+        path: "forgot-password",
+        element: <ForgotPassword/>
+      },
+      PrivateRouter
     ],
   },
 ]);

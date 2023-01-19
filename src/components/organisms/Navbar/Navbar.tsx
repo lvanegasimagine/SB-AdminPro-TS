@@ -1,27 +1,22 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
-  FiActivity,
   FiAlignLeft,
   FiBarChart,
   FiBell,
-  FiBook,
-  FiCode,
-  FiFileText,
   FiLogOut,
   FiMail,
   FiSearch,
   FiSettings,
   FiUserPlus,
-  FiChevronRight,
 } from "react-icons/fi";
 import "./styles/Navbar.css";
 import { NavLink } from "react-router-dom";
-import { logOut, upload } from "@/firebase/FirebaseConfig";
 import { UserContext } from "@/context";
 import { UserContextProvider } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
-
-export interface NavbarInterface { 
+import { logOut, upload } from "@/services";
+import moment from "moment";
+export interface NavbarInterface {
   // setReloadApp: React.Dispatch<React.SetStateAction<undefined>>
 }
 
@@ -33,7 +28,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
   const [menu, setMenu] = useState<string>("sidebarToggle");
   const [photo, setPhoto] = useState('null');
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     (async () => {
       if (currentUser?.photoURL) {
@@ -48,6 +43,9 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
     }
   }
 
+  const dateString = user.metadata.creationTime
+  console.log("🚀 ~ file: Navbar.tsx:47 ~ dateString", dateString)
+
   function handleClick() {
     upload(photo, currentUser, setLoading).then(() => {
       setLoading(false);
@@ -56,7 +54,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
   }
 
   const handleLogout = async () => {
-    await logOut().then(() => console.log("Sesion cerrada"));
+    await logOut()
   };
 
   return (
@@ -92,7 +90,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
         </div>
       </form>
       <ul className="navbar-nav align-items-center ms-auto">
-        <li className="nav-item dropdown no-caret d-none d-md-block me-3">
+        {/* <li className="nav-item dropdown no-caret d-none d-md-block me-3">
           <a
             className="nav-link dropdown-toggle"
             id="navbarDropdownDocs"
@@ -183,18 +181,17 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
               </div>
             </form>
           </div>
-        </li>
+        </li> */}
         <li className="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
-          <a
-            className="btn btn-icon btn-transparent-dark dropdown-toggle"
-            id="navbarDropdownAlerts"
-            // href="javascript:void(0);"
+          <a type="button" className="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts"
             role="button"
             data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
+            aria-haspopup="true">
             <FiBell />
+            <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+              1+
+              <span className="visually-hidden">unread messages</span>
+            </span>
           </a>
           <div
             className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
@@ -206,11 +203,11 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             </h6>
             <a className="dropdown-item dropdown-notifications-item" href="#!">
               <div className="dropdown-notifications-item-icon bg-warning">
-                <FiActivity />
+                <FiMail />
               </div>
               <div className="dropdown-notifications-item-content">
                 <div className="dropdown-notifications-item-content-details">
-                  December 29, 2021
+                  {user.metadata.creationTime}
                 </div>
                 <div className="dropdown-notifications-item-content-text">
                   This is an alert message. It's nothing serious, but it

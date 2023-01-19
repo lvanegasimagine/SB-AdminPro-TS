@@ -6640,7 +6640,7 @@ textarea.form-control-lg {
 
 .btn .badge {
   position: relative;
-  top: -1px;
+  top: 8px;
 }
 
 .alert {

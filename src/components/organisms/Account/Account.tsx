@@ -1,29 +1,22 @@
 import React from "react";
 import Profile1 from '@/assets/profile-1.png';
-import { FiUser } from "react-icons/fi";
+import { FiGlobe, FiUser } from "react-icons/fi";
 import './styles/Account.css'
-export interface AccountInterface {}
+import { Header } from "@/components/atoms";
+export interface AccountInterface { }
 
 const Account: React.FC<AccountInterface> = (): JSX.Element => {
   return (
     <>
       <main>
-        <header className="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-          <div className="container-xl px-4">
-            <div className="page-header-content">
-              <div className="row align-items-center justify-content-between pt-3">
-                <div className="col-auto mb-3">
-                  <h1 className="page-header-title">
-                    <div className="page-header-icon">
-                      <FiUser/>
-                    </div>
-                    Account Settings - Profile
-                  </h1>
-                </div>
-              </div>
+        <Header>
+          <h1 className="page-header-title">
+            <div className="page-header-icon">
+              <FiGlobe />
             </div>
-          </div>
-        </header>
+            Organization Details
+          </h1>
+        </Header>
         <div className="container-xl px-4 mt-4">
           <nav className="nav nav-borders">
             <a className="nav-link active ms-0" href="account-profile.html">

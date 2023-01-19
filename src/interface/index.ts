@@ -15,3 +15,14 @@ export interface IRegisterValue {
   password: string;
   confirmPassword: string;
 }
+
+export interface MyFormValues {
+  email: string;
+  password: string;
+}
+
+export interface propsWithFieldFormik {
+  field: any,
+  form?: any,
+  meta: any
+}

@@ -1,4 +1,12 @@
+import { Auth, User } from "firebase/auth";
+
+export type TUserContext = [
+    boolean, 
+    React.Dispatch<React.SetStateAction<undefined>>
+];
+
+
 export type UserContextProvider = {
-    user: null | {},
+    user: Auth | {},
     setUser: (value: boolean) => boolean,
 }

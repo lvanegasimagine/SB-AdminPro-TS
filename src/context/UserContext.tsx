@@ -1,5 +1,4 @@
-import React, { createContext } from "react";
-
-type TUserContext = [boolean, React.Dispatch<React.SetStateAction<undefined>>];
+import { TUserContext } from "@/types";
+import { createContext } from "react";
 
 export const UserContext = createContext<TUserContext | {}>({});

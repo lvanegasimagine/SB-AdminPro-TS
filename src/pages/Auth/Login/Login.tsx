@@ -2,18 +2,14 @@ import React, { useEffect, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { UserContext } from "@/context";
-import { login, loginWithGoogle } from "@/firebase/FirebaseConfig";
+import { UserContextProvider } from "@/types";
+import { login, loginWithGoogle } from "@/services";
+import { MyFormValues } from "@/interface";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import * as Yup from "yup";
-import { UserContextProvider } from "@/types";
 import "./styles/Login.css";
 
 export interface LoginInterface {}
-
-interface MyFormValues {
-  email: string;
-  password: string;
-}
 
 const Login: React.FC<LoginInterface> = (): JSX.Element => {
   const { user } = useContext(UserContext) as UserContextProvider;
@@ -134,12 +130,12 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
                           </div>
                           {errors.password && touched.password && errors.password}
                           <div className="mb-3">
-                            <a
+                            <NavLink
                               className="small"
-                              href="auth-password-social.html"
+                              to="forgot-password"
                             >
                               Forgot your password?
-                            </a>
+                            </NavLink>
                           </div>
                           <div className="d-flex align-items-center justify-content-between mb-0">
                             <div className="form-check">
