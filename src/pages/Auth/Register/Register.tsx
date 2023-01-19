@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Formik } from "formik";
-import { loginWithGoogle, register, changeUserName, sendVerificationEmail, auth } from "@/firebase/FirebaseConfig";
 import { useRedirectActiveUser } from "@/hooks/useRedirectActiveUser";
 import { NavLink } from "react-router-dom";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
@@ -10,6 +9,8 @@ import { IRegisterValue } from "@/interface";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import * as Yup from "yup";
 import "./styles/Register.css";
+import { changeUserName, loginWithGoogle, register, sendVerificationEmail } from "@/services";
+import { auth } from "@/firebase/FirebaseConfig";
 
 export interface RegisterInterface {}
 

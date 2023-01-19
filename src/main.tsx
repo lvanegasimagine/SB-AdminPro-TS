@@ -7,6 +7,6 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} fallbackElement={<Loader/>} />
+      <RouterProvider router={router} fallbackElement={<Loader />} />
   </React.StrictMode>
 );

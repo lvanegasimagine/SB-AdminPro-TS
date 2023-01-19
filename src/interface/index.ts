@@ -15,3 +15,8 @@ export interface IRegisterValue {
   password: string;
   confirmPassword: string;
 }
+
+export interface MyFormValues {
+  email: string;
+  password: string;
+}
