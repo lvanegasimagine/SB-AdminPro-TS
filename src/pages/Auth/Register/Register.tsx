@@ -1,16 +1,21 @@
 import React, { useContext, useState } from "react";
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useRedirectActiveUser } from "@/hooks/useRedirectActiveUser";
 import { NavLink } from "react-router-dom";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import { UserContext } from "@/context/UserContext";
 import { UserContextProvider } from "@/types";
-import { IRegisterValue } from "@/interface";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { IActionsForms, IRegisterValue } from "@/interface";
 import * as Yup from "yup";
-import "./styles/Register.css";
-import { changeUserName, loginWithGoogle, register, sendVerificationEmail } from "@/services";
+import {
+  changeUserName,
+  loginWithGoogle,
+  register,
+  sendVerificationEmail,
+} from "@/services";
 import { auth } from "@/firebase/FirebaseConfig";
+import "./styles/Register.css";
+import FormikControl from "@/formik/FormikControl";
 
 export interface RegisterInterface {}
 
@@ -22,33 +27,13 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
 
   useRedirectActiveUser(user, "/");
 
-  const onSubmit = async (values: any, actions: any) => {
-    try {
-      const displayName = values?.name + " " + values?.surname;
-      await register({
-        email: values.email,
-        password: values.password,
-        displayName: displayName,
-      })
-      .then(() => {
-        changeUserName(auth, displayName).then(() => {
-          console.log('actualizado')
-          setUser(!user);
-        });
-        sendVerificationEmail(auth);
-      })
-      .catch((err) => console.log("Error Creando la cuenta", err));
-      console.log("user logged in");
-      actions.resetForm();
-    } catch (error: any) {
-      console.log(error.code);
-      console.log(error.message);
-      if (error.code === "auth/email-already-in-use") {
-        actions.setErrors({ email: "Email already in use" });
-      }
-    } finally {
-      actions.setSubmitting(false);
-    }
+  const initialValues: IRegisterValue = {
+    name: "Luis",
+    surname: "Vanegas",
+    email: "lvanegas1429@gmail.com",
+    password: "123456789",
+    confirmPassword: "123456789",
+    terms: false,
   };
 
   const validationSchema = Yup.object().shape({
@@ -63,14 +48,38 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
       .label("confirm password")
       .required()
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
+    terms: Yup.boolean().required("Aceptar los terminos"),
   });
 
-  const initialValues: IRegisterValue = {
-    name: "Luis",
-    surname: "Vanegas",
-    email: "lvanegas1429@gmail.com",
-    password: "123456789",
-    confirmPassword: "123456789",
+  const onSubmit = async (
+    { email, password, name, surname }: IRegisterValue,
+    actions: IActionsForms
+  ) => {
+    try {
+      const displayName = `${name} ${surname}`;
+      register({
+        email,
+        password,
+        displayName,
+      });
+      // .then(() => {
+      //   changeUserName(auth, displayName).then(() => {
+      //     console.log("actualizado");
+      //     setUser(!user);
+      //   });
+      //   sendVerificationEmail(auth);
+      // })
+      // .catch((err) => console.log("Error Creando la cuenta", err));
+      actions.resetForm();
+    } catch (err: any) {
+      console.log(err);
+      // if (err.code === "auth/email-already-in-use") {
+      //   // actions.setErrors(alert(''));
+      //   alert('Email en uso')
+      // }
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
 
   const handleGoogleSignIn = async () => {
@@ -125,186 +134,85 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
                       onSubmit={onSubmit}
                       validationSchema={validationSchema}
                     >
-                      {({
-                        handleSubmit,
-                        handleChange,
-                        values,
-                        isSubmitting,
-                        errors,
-                        touched,
-                        handleBlur,
-                      }) => (
-                        <form onSubmit={handleSubmit}>
+                      {({ handleSubmit, isSubmitting }) => (
+                        <Form onSubmit={handleSubmit}>
                           <div className="row gx-3">
                             <div className="col-md-6">
                               <div className="mb-3">
-                                <label
-                                  className="text-gray-600 small"
-                                  htmlFor="firstNameExample"
-                                >
-                                  First name
-                                </label>
-                                <input
-                                  className="form-control form-control-solid"
+                                <FormikControl
+                                  control="InputField"
                                   type="text"
-                                  placeholder=""
-                                  aria-label="First Name"
-                                  aria-describedby="firstNameExample"
-                                  value={values.name}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
+                                  label="First Name"
                                   name="name"
+                                  required
                                 />
-                              </div>
-                              <div className="invalid-feedback">
-                                {errors.name && touched.name && errors.name}
                               </div>
                             </div>
                             <div className="col-md-6">
                               <div className="mb-3">
-                                <label
-                                  className="text-gray-600 small"
-                                  htmlFor="lastNameExample"
-                                >
-                                  Last name
-                                </label>
-                                <input
-                                  className="form-control form-control-solid"
+                                <FormikControl
+                                  control="InputField"
                                   type="text"
-                                  placeholder=""
-                                  aria-label="Last Name"
-                                  aria-describedby="lastNameExample"
-                                  value={values.surname}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
+                                  label="Last Name"
                                   name="surname"
+                                  required
                                 />
                               </div>
-                              {errors.surname &&
-                                touched.surname &&
-                                errors.surname}
                             </div>
                           </div>
                           <div className="mb-3">
-                            <label
-                              className="text-gray-600 small"
-                              htmlFor="emailExample"
-                            >
-                              Email address
-                            </label>
-                            <input
-                              className="form-control form-control-solid"
-                              type="text"
-                              placeholder=""
-                              aria-label="Email Address"
-                              aria-describedby="emailExample"
-                              value={values.email}
-                              onChange={handleChange}
+                            <FormikControl
+                              control="InputField"
+                              type="email"
+                              label="Email Address"
                               name="email"
-                              onBlur={handleBlur}
+                              required
                             />
                           </div>
-                          {errors.email && touched.email && errors.email}
                           <div className="row gx-3">
                             <div className="col-md-6">
                               <div className="mb-3">
-                                <label
-                                  className="text-gray-600 small"
-                                  htmlFor="confirmPasswordExample"
-                                >
-                                  Password
-                                </label>
-                                <div className="input-group input-group-joined input-group-solid">
-                                  <input
-                                    className="form-control pe-0"
-                                    type={showPassword ? "text" : "password"}
-                                    aria-label="Password"
-                                    value={values.password}
-                                    onChange={handleChange}
-                                    name="password"
-                                    onBlur={handleBlur}
-                                  />
-                                  <span className="input-group-text">
-                                    {showPassword ? (
-                                      <FiEye onClick={handlePassword} />
-                                    ) : (
-                                      <FiEyeOff onClick={handlePassword} />
-                                    )}
-                                  </span>
-                                </div>
+                                <FormikControl
+                                  control="TextFieldPassword"
+                                  type="password"
+                                  label="Password"
+                                  name="password"
+                                  required
+                                  showPassword={showPassword}
+                                  handlePassword={handlePassword}
+                                />
                               </div>
                             </div>
-                            {errors.password &&
-                              touched.password &&
-                              errors.password}
                             <div className="col-md-6">
                               <div className="mb-3">
-                                <label
-                                  className="text-gray-600 small"
-                                  htmlFor="confirmPasswordExample"
-                                >
-                                  Confirm Password
-                                </label>
-                                <div className="input-group input-group-joined input-group-solid">
-                                  <input
-                                    className="form-control pe-0"
-                                    type={
-                                      showConfirmPassword ? "text" : "password"
-                                    }
-                                    placeholder="Input group append..."
-                                    aria-label="Search"
-                                    value={values.confirmPassword}
-                                    onChange={handleChange}
-                                    name="confirmPassword"
-                                    onBlur={handleBlur}
-                                  />
-                                  <span className="input-group-text">
-                                    {showConfirmPassword ? (
-                                      <FiEye onClick={handleConfirmPassword} />
-                                    ) : (
-                                      <FiEyeOff
-                                        onClick={handleConfirmPassword}
-                                      />
-                                    )}
-                                  </span>
-                                </div>
+                                <FormikControl
+                                  control="TextFieldPasswordConfirm"
+                                  type="password"
+                                  label="Confirm Password"
+                                  name="confirmPassword"
+                                  required
+                                  showConfirmPassword={showConfirmPassword}
+                                  handleConfirmPassword={handleConfirmPassword}
+                                />
                               </div>
                             </div>
                           </div>
-                          {errors.confirmPassword &&
-                            touched.confirmPassword &&
-                            errors.confirmPassword}
                           <div className="d-flex align-items-center justify-content-between">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                id="checkTerms"
-                                type="checkbox"
-                                value=""
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="checkTerms"
-                              >
-                                I accept the
-                                <a href="#!"> terms &amp; conditions</a>.
-                              </label>
-                            </div>
                             <button
-                              className="btn btn-primary"
+                              className="btn btn-primary btn-lg mt-2"
                               type="submit"
                               disabled={isSubmitting}
                             >
                               Create Account
                             </button>
                           </div>
-                        </form>
+                        </Form>
                       )}
                     </Formik>
                   </div>
                   <hr className="my-0" />
                   <div className="card-body px-5 py-4">
-                    <div className="small text-center">
+                    <div className="small text-center fs-5">
                       Have an account?
                       <NavLink to="/"> Sign in!</NavLink>
                     </div>

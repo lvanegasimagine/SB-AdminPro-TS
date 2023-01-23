@@ -1,17 +1,18 @@
-import TextField from "./Form/TextField";
+import { TextField, TextFieldPassword, TextFieldPasswordConfirm } from "./Form";
 
 function FormikControl(props: any) {
-    const { control, ...rest} = props;
-    
-    switch (control) {
-        case 'InputField':
-            return <TextField {...rest}/>
-            break;
-    
-        default:
-            return null;
-            break;
-    }
+  const { control, ...rest } = props;
+
+  switch (control) {
+    case "InputField":
+      return <TextField {...rest} />;
+    case "TextFieldPassword":
+      return <TextFieldPassword {...rest} />;
+    case "TextFieldPasswordConfirm":
+      return <TextFieldPasswordConfirm {...rest} />;
+    default:
+      return null;
+  }
 }
 
-export default FormikControl
+export default FormikControl;

@@ -1,13 +1,14 @@
 import React, { useEffect, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import { UserContext } from "@/context";
 import { UserContextProvider } from "@/types";
 import { login, loginWithGoogle } from "@/services";
-import { MyFormValues } from "@/interface";
+import { IActionsForms, ILoginValues } from "@/interface";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import * as Yup from "yup";
 import "./styles/Login.css";
+import FormikControl from "@/formik/FormikControl";
 
 export interface LoginInterface {}
 
@@ -19,35 +20,29 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
     if (user) navigate("/dashboard");
   }, [user]);
 
+  const initialValues: ILoginValues = {
+    email: "lvanegas1429@gmail.com",
+    password: "123456789",
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Email not Valid").required("Email is required"),
+    password: Yup.string().trim().min(6).required("Password is required"),
+  });
+
   const onSubmit = async (
-    values: any,
-    actions: any
+    { email, password }: ILoginValues,
+    actions: IActionsForms
   ) => {
     try {
-      console.log(values.email, values.password);
-      await login({ email: values.email, password: values.password });
-      console.log("user logged in");
+      await login({ email, password });
       actions.resetForm();
-    } catch (error: any) {
-      console.log(error.code);
-      console.log(error.message);
-      if (error.code === "auth/user-not-found") {
-        actions.setErrors({ email: "Email already in use" });
-      }
-      if (error.code === "auth/wrong-password") {
-        actions.setErrors({ password: "Wrong password" });
-      }
+    } catch (err: any) {
+      handleErrors(err.code);
     } finally {
       actions.setSubmitting(false);
     }
   };
-
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email().required(),
-    password: Yup.string().trim().min(6).required(),
-  });
-
-  const initialValues: MyFormValues = { email: "lvanegas1429@gmail.com", password: "123456789" };
 
   return (
     <div id="layoutAuthentication">
@@ -65,7 +60,11 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
                     <a className="btn btn-icon btn-github mx-1" href="#!">
                       <FaGithub />
                     </a>
-                    <button type="button" className="btn btn-icon btn-google mx-1" onClick={async () => await loginWithGoogle()}>
+                    <button
+                      type="button"
+                      className="btn btn-icon btn-google mx-1"
+                      onClick={async () => await loginWithGoogle()}
+                    >
                       <FaGoogle />
                     </button>
                     <a className="btn btn-icon btn-twitter mx-1" href="#!">
@@ -79,61 +78,29 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
                       onSubmit={onSubmit}
                       validationSchema={validationSchema}
                     >
-                      {({
-                        handleSubmit,
-                        handleChange,
-                        values,
-                        isSubmitting,
-                        errors,
-                        touched,
-                        handleBlur,
-                      }) => (
-                        <form onSubmit={handleSubmit}>
+                      {({ handleSubmit, isSubmitting }) => (
+                        <Form onSubmit={handleSubmit}>
                           <div className="mb-3">
-                            <label
-                              className="text-gray-600 small"
-                              htmlFor="emailExample"
-                            >
-                              Email address
-                            </label>
-                            <input
-                              className="form-control form-control-solid"
-                              type="text"
-                              placeholder=""
-                              aria-label="Email Address"
-                              aria-describedby="emailExample"
-                              value={values.email}
-                              onChange={handleChange}
+                            <FormikControl
+                              control="InputField"
+                              type="email"
+                              label="Email Address"
                               name="email"
-                              onBlur={handleBlur}
+                              required
                             />
                           </div>
-                          {errors.email && touched.email && errors.email}
                           <div className="mb-3">
-                            <label
-                              className="text-gray-600 small"
-                              htmlFor="passwordExample"
-                            >
-                              Password
-                            </label>
-                            <input
-                              className="form-control form-control-solid"
+                            <FormikControl
+                              control="InputField"
                               type="password"
-                              placeholder=""
-                              aria-label="Password"
-                              aria-describedby="passwordExample"
-                              value={values.password}
-                              onChange={handleChange}
+                              label="Password"
                               name="password"
-                              onBlur={handleBlur}
+                              required
                             />
                           </div>
-                          {errors.password && touched.password && errors.password}
+
                           <div className="mb-3">
-                            <NavLink
-                              className="small"
-                              to="forgot-password"
-                            >
+                            <NavLink className="small" to="forgot-password">
                               Forgot your password?
                             </NavLink>
                           </div>
@@ -154,12 +121,13 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
                             </div>
                             <button
                               className="btn btn-primary"
-                              type="submit" disabled={isSubmitting}
+                              type="submit"
+                              disabled={isSubmitting}
                             >
                               Login
                             </button>
                           </div>
-                        </form>
+                        </Form>
                       )}
                     </Formik>
                   </div>
@@ -176,24 +144,19 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
           </div>
         </main>
       </div>
-      <div id="layoutAuthentication_footer">
-        <footer className="footer-admin mt-auto footer-dark">
-          <div className="container-xl px-4">
-            <div className="row">
-              <div className="col-md-6 small">
-                Copyright &copy; Your Website 2021
-              </div>
-              <div className="col-md-6 text-md-end small">
-                <a href="#!">Privacy Policy</a>
-                &middot;
-                <a href="#!">Terms &amp; Conditions</a>
-              </div>
-            </div>
-          </div>
-        </footer>
-      </div>
     </div>
   );
 };
 
 export default Login;
+
+function handleErrors(code: any) {
+  switch (code) {
+    case "auth/wrong-password":
+    case "auth/user-not-found":
+      alert("El usuario o contraseña son incorrecto.");
+      break;
+    default:
+      break;
+  }
+}

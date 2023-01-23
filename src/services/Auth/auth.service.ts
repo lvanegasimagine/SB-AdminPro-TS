@@ -15,7 +15,7 @@ export const login = ({ email, password }: IUserLogin) =>
   signInWithEmailAndPassword(auth, email, password);
 
 export const register = ({ email, password }: IUserRegister) => {
-  return createUserWithEmailAndPassword(auth, email, password);
+  createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const changeUserName = (auth: any, displayName: string) => {
