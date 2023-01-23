@@ -1,14 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Formik, Form, FormikProps } from "formik";
+import { Formik, Form } from "formik";
+import { forgotPassword } from "@/services";
+import FormikControl from "@/formik/FormikControl";
 import * as Yup from "yup";
 import "./styles/ForgotPassword.css";
-import FormikControl from "@/formik/FormikControl";
-import { forgotPassword } from "@/services";
 
 export interface ForgotPasswordInterface {}
 
 const ForgotPassword: React.FC<ForgotPasswordInterface> = () => {
   const navigate = useNavigate();
+
   const initialValues = {
     email: "",
   };
@@ -21,7 +22,7 @@ const ForgotPassword: React.FC<ForgotPasswordInterface> = () => {
     await forgotPassword(values.email).then(() => {
       console.log("Correo enviado");
       navigate("/");
-	  action.resetForm();
+	    action.resetForm();
     });
   };
 
@@ -48,7 +49,7 @@ const ForgotPassword: React.FC<ForgotPasswordInterface> = () => {
                       onSubmit={onSubmit}
                     >
                       {({ handleSubmit, isSubmitting }) => (
-                        <form onSubmit={handleSubmit}>
+                        <Form onSubmit={handleSubmit}>
                           <div className="mb-3">
                             <FormikControl
                               control="InputField"
@@ -65,7 +66,7 @@ const ForgotPassword: React.FC<ForgotPasswordInterface> = () => {
                           >
                             Reset Password
                           </button>
-                        </form>
+                        </Form>
                       )}
                     </Formik>
                   </div>

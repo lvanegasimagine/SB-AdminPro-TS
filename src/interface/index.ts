@@ -3,9 +3,9 @@ export interface IUserLogin {
   password: string;
 }
 export interface IUserRegister {
-  displayName: string;
   email: string;
   password: string;
+  displayName: string;
 }
 
 export interface IRegisterValue {
@@ -14,15 +14,22 @@ export interface IRegisterValue {
   email: string;
   password: string;
   confirmPassword: string;
+  terms: boolean
 }
 
-export interface MyFormValues {
+export interface ILoginValues {
   email: string;
   password: string;
 }
 
+export interface IActionsForms {
+  resetForm: () => void;
+  setErrors: (err: { email?: string; password?: string }) => void;
+  setSubmitting: (err: boolean) => void;
+}
+
 export interface propsWithFieldFormik {
-  field: any,
-  form?: any,
-  meta: any
+  field: any;
+  form?: any;
+  meta: any;
 }
