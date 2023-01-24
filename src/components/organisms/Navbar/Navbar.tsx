@@ -28,6 +28,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
   const [menu, setMenu] = useState<string>("sidebarToggle");
   const [photo, setPhoto] = useState('null');
   const [loading, setLoading] = useState(false);
+  console.log("🚀 ~ file: Navbar.tsx:26 ~ currentUser", currentUser)
 
   useEffect(() => {
     (async () => {
@@ -36,6 +37,14 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
       }
     })();
   }, [currentUser])
+
+  // useEffect(() => {
+  //   (async () => {
+  //     if (user?.photoURL) {
+  //       await setPhotoURL(user.photoURL);
+  //     }
+  //   })();
+  // }, [user])
 
   function handleChange(e: any) {
     if (e.target.files[0]) {

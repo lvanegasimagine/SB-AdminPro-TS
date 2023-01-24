@@ -33,7 +33,6 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
     email: "lvanegas1429@gmail.com",
     password: "123456789",
     confirmPassword: "123456789",
-    terms: false,
   };
 
   const validationSchema = Yup.object().shape({
@@ -48,7 +47,6 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
       .label("confirm password")
       .required()
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
-    terms: Yup.boolean().required("Aceptar los terminos"),
   });
 
   const onSubmit = async (
@@ -222,22 +220,6 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
             </div>
           </div>
         </main>
-      </div>
-      <div id="layoutAuthentication_footer">
-        <footer className="footer-admin mt-auto footer-dark">
-          <div className="container-xl px-4">
-            <div className="row">
-              <div className="col-md-6 small">
-                Copyright &copy; Your Website 2021
-              </div>
-              <div className="col-md-6 text-md-end small">
-                <a href="#!">Privacy Policy</a>
-                &middot;
-                <a href="#!">Terms &amp; Conditions</a>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
     </div>
   );

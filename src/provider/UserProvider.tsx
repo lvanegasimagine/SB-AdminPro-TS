@@ -1,4 +1,5 @@
-import { PropsWithChildren, useState, useEffect } from "react";
+import { PropsWithChildren, useState, useEffect, useContext } from "react";
+import { UserContextProvider } from "@/types";
 import { UserContext } from "@/context/UserContext";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '@/firebase/FirebaseConfig';
@@ -19,3 +20,7 @@ export const UserProvider = ({ children }: PropsWithChildren): JSX.Element => {
 
   return <UserContext.Provider value={{user, setUser}}>{children}</UserContext.Provider>;
 };
+
+export function useUserContext(){
+  return useContext(UserContext) as UserContextProvider;
+}

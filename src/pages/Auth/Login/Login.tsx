@@ -9,11 +9,12 @@ import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
 import * as Yup from "yup";
 import "./styles/Login.css";
 import FormikControl from "@/formik/FormikControl";
+import { useUserContext } from "@/provider";
 
 export interface LoginInterface {}
 
 const Login: React.FC<LoginInterface> = (): JSX.Element => {
-  const { user } = useContext(UserContext) as UserContextProvider;
+  const { user } = useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,15 +33,15 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
 
   const onSubmit = async (
     { email, password }: ILoginValues,
-    actions: IActionsForms
+    {resetForm, setSubmitting}: IActionsForms
   ) => {
     try {
       await login({ email, password });
-      actions.resetForm();
+      resetForm();
     } catch (err: any) {
       handleErrors(err.code);
     } finally {
-      actions.setSubmitting(false);
+      setSubmitting(false);
     }
   };
 

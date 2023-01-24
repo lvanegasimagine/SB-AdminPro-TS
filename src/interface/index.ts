@@ -14,7 +14,6 @@ export interface IRegisterValue {
   email: string;
   password: string;
   confirmPassword: string;
-  terms: boolean
 }
 
 export interface ILoginValues {
