@@ -157,6 +157,9 @@ function handleErrors(code: any) {
     case "auth/user-not-found":
       alert("El usuario o contraseña son incorrecto.");
       break;
+    case "auth/email-not-found":
+      alert('Usuario No Existe')
+      break;
     default:
       break;
   }

@@ -51,7 +51,7 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
 
   const onSubmit = async (
     { email, password, name, surname }: IRegisterValue,
-    actions: IActionsForms
+    {resetForm, setSubmitting, setErrors}: IActionsForms
   ) => {
     try {
       const displayName = `${name} ${surname}`;
@@ -59,24 +59,22 @@ const Register: React.FC<RegisterInterface> = (): JSX.Element => {
         email,
         password,
         displayName,
-      });
-      // .then(() => {
-      //   changeUserName(auth, displayName).then(() => {
-      //     console.log("actualizado");
-      //     setUser(!user);
-      //   });
-      //   sendVerificationEmail(auth);
-      // })
-      // .catch((err) => console.log("Error Creando la cuenta", err));
-      actions.resetForm();
+      }).then(() => {
+       changeUserName(auth, displayName).then(() => {
+         console.log("actualizado");
+         setUser(!user);
+       });
+       sendVerificationEmail(auth);
+     })
+     .catch((err) => console.log("Error Creando la cuenta", err));
+      resetForm();
     } catch (err: any) {
       console.log(err);
-      // if (err.code === "auth/email-already-in-use") {
-      //   // actions.setErrors(alert(''));
-      //   alert('Email en uso')
-      // }
+      if (err.code === "auth/email-already-in-use") {
+        alert('Email en uso')
+      }
     } finally {
-      actions.setSubmitting(false);
+      setSubmitting(false);
     }
   };
 

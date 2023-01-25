@@ -15,7 +15,7 @@ export const login = ({ email, password }: IUserLogin) =>
   signInWithEmailAndPassword(auth, email, password);
 
 export const register = ({ email, password }: IUserRegister) => {
-  createUserWithEmailAndPassword(auth, email, password);
+  return createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const changeUserName = (auth: any, displayName: string) => {
@@ -25,8 +25,8 @@ export const changeUserName = (auth: any, displayName: string) => {
 };
 
 export const sendVerificationEmail = async (auth: any) => {
-  return sendEmailVerification(auth.currentUser).then((_) =>
-    console.log("todo bien")
+  return sendEmailVerification(auth.currentUser).then((user) =>
+    console.log(user)
   );
 };
 

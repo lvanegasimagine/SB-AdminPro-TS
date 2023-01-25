@@ -15,7 +15,10 @@ import { UserContext } from "@/context";
 import { UserContextProvider } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { logOut, upload } from "@/services";
+import { useUserContext } from "@/provider";
 import moment from "moment";
+import 'moment-timezone';
+// moment.locale('es')
 export interface NavbarInterface {
   // setReloadApp: React.Dispatch<React.SetStateAction<undefined>>
 }
@@ -23,12 +26,15 @@ export interface NavbarInterface {
 const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
 
   const currentUser: any = useAuth();
-  const { user, setUser }: any = useContext(UserContext) as UserContextProvider;
+  const { user, setUser }: any = useUserContext();
   const [photoURL, setPhotoURL] = useState('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png')
   const [menu, setMenu] = useState<string>("sidebarToggle");
   const [photo, setPhoto] = useState('null');
+  const [notifications, setNotifications] = useState<boolean>(false);
+  const [date, setDate] = useState('')
   const [loading, setLoading] = useState(false);
-  console.log("🚀 ~ file: Navbar.tsx:26 ~ currentUser", currentUser)
+
+
 
   useEffect(() => {
     (async () => {
@@ -38,22 +44,24 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
     })();
   }, [currentUser])
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (user?.photoURL) {
-  //       await setPhotoURL(user.photoURL);
-  //     }
-  //   })();
-  // }, [user])
+  useEffect(() => {
+    (async () => {
+      if (currentUser?.emailVerified === false) {
+        const dateCreate = moment(currentUser?.metadata?.creationTime);
+        setDate(dateCreate.format('dddd Do MMMM YYYY'))
+        setNotifications(true);
+      }
+    })();
+  }, [currentUser])
+
+  console.log(date);
+
 
   function handleChange(e: any) {
     if (e.target.files[0]) {
       setPhoto(e.target.files[0])
     }
   }
-
-  const dateString = user.metadata.creationTime
-  console.log("🚀 ~ file: Navbar.tsx:47 ~ dateString", dateString)
 
   function handleClick() {
     upload(photo, currentUser, setLoading).then(() => {
@@ -99,132 +107,47 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
         </div>
       </form>
       <ul className="navbar-nav align-items-center ms-auto">
-        {/* <li className="nav-item dropdown no-caret d-none d-md-block me-3">
-          <a
-            className="nav-link dropdown-toggle"
-            id="navbarDropdownDocs"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <div className="fw-500">Documentation
-              <FiChevronRight style={{ justifyContent: 'center', textAlign: 'center', alignItems: 'center' }} />
-            </div>
-          </a>
-          <div
-            className="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up"
-            aria-labelledby="navbarDropdownDocs"
-          >
-            <a
-              className="dropdown-item py-3"
-              href="https://docs.startbootstrap.com/sb-admin-pro"
-              target="_blank"
-            >
-              <div className="icon-stack bg-primary-soft text-primary me-4">
-                <FiBook color="#0061f2" />
-              </div>
-              <div>
-                <div className="small text-gray-500">Documentation</div>
-                Usage instructions and reference
-              </div>
-            </a>
-            <div className="dropdown-divider m-0"></div>
-            <a
-              className="dropdown-item py-3"
-              href="https://docs.startbootstrap.com/sb-admin-pro/components"
-              target="_blank"
-            >
-              <div className="icon-stack bg-primary-soft text-primary me-4">
-                <FiCode color="#0061f2" />
-              </div>
-              <div>
-                <div className="small text-gray-500">Components</div>
-                Code snippets and reference
-              </div>
-            </a>
-            <div className="dropdown-divider m-0"></div>
-            <a
-              className="dropdown-item py-3"
-              href="https://docs.startbootstrap.com/sb-admin-pro/changelog"
-              target="_blank"
-            >
-              <div className="icon-stack bg-primary-soft text-primary me-4">
-                <FiFileText color="#0061f2" />
-              </div>
-              <div>
-                <div className="small text-gray-500">Changelog</div>
-                Updates and changes
-              </div>
-            </a>
-          </div>
-        </li>
-        <li className="nav-item dropdown no-caret me-3 d-lg-none">
-          <a
-            className="btn btn-icon btn-transparent-dark dropdown-toggle"
-            id="searchDropdown"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <FiSearch />
-          </a>
-          <div
-            className="dropdown-menu dropdown-menu-end p-3 shadow animated--fade-in-up"
-            aria-labelledby="searchDropdown"
-          >
-            <form className="form-inline me-auto w-100">
-              <div className="input-group input-group-joined input-group-solid">
-                <input
-                  className="form-control pe-0"
-                  type="text"
-                  placeholder="Search for..."
-                  aria-label="Search"
-                  aria-describedby="basic-addon2"
-                />
-                <div className="input-group-text">
-                  <FiSearch />
-                </div>
-              </div>
-            </form>
-          </div>
-        </li> */}
         <li className="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
           <a type="button" className="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true">
             <FiBell />
-            <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
-              1+
-              <span className="visually-hidden">unread messages</span>
-            </span>
+            {notifications &&
+              <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                1+
+                <span className="visually-hidden">unread messages</span>
+              </span>
+            }
           </a>
           <div
             className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
             aria-labelledby="navbarDropdownAlerts"
           >
-            <h6 className="dropdown-header dropdown-notifications-header">
-              <FiBell color="#fff" className="me-2" />
-              Alerts Center
-            </h6>
-            <a className="dropdown-item dropdown-notifications-item" href="#!">
-              <div className="dropdown-notifications-item-icon bg-warning">
-                <FiMail />
-              </div>
-              <div className="dropdown-notifications-item-content">
-                <div className="dropdown-notifications-item-content-details">
-                  {user.metadata.creationTime}
-                </div>
-                <div className="dropdown-notifications-item-content-text">
-                  This is an alert message. It's nothing serious, but it
-                  requires your attention.
-                </div>
-              </div>
-            </a>
-            <a className="dropdown-item dropdown-notifications-item" href="#!">
+            {notifications &&
+              <>
+                <h6 className="dropdown-header dropdown-notifications-header">
+                  <FiBell color="#fff" className="me-2" />
+                  Alerts Center
+                </h6>
+
+                <a className="dropdown-item dropdown-notifications-item" href="#!">
+                  <div className="dropdown-notifications-item-icon bg-warning">
+                    <FiMail />
+                  </div>
+                  <div className="dropdown-notifications-item-content">
+                    <div className="dropdown-notifications-item-content-details">
+                      {date}
+                      {/* Confirmar Correo Electronico */}
+                    </div>
+                    <div className="dropdown-notifications-item-content-text">
+                      Verifica Tu Email.
+                    </div>
+                  </div>
+                </a>
+              </>
+            }
+            {/* <a className="dropdown-item dropdown-notifications-item" href="#!">
               <div className="dropdown-notifications-item-icon bg-info">
                 <FiBarChart />
               </div>
@@ -263,13 +186,13 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
                   organization.
                 </div>
               </div>
-            </a>
-            <a
+            </a> */}
+            {/* <a
               className="dropdown-item dropdown-notifications-footer"
               href="#!"
             >
               View All Alerts
-            </a>
+            </a> */}
           </div>
         </li>
         <li className="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
