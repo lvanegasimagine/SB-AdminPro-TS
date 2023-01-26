@@ -1,11 +1,13 @@
 import React from "react";
-import Profile1 from '@/assets/profile-1.png';
+import Profile1 from "@/assets/profile-1.png";
 import { FiGlobe, FiUser } from "react-icons/fi";
-import './styles/Account.css'
-import { Header } from "@/components/atoms";
-export interface AccountInterface { }
+import "./styles/Account.css";
+import { Header, UploadAvatar } from "@/components/atoms";
+import { useUserContext } from "@/provider";
+export interface AccountInterface {}
 
 const Account: React.FC<AccountInterface> = (): JSX.Element => {
+  const { user, setUser, setReloadApp } = useUserContext();
   return (
     <>
       <main>
@@ -34,7 +36,12 @@ const Account: React.FC<AccountInterface> = (): JSX.Element => {
           </nav>
           <hr className="mt-0 mb-4" />
           <div className="row">
-            <div className="col-xl-4">
+            <UploadAvatar
+              user={user}
+              setUser={setUser}
+              setReloadApp={setReloadApp}
+            />
+            {/* <div className="col-xl-4">
               <div className="card mb-4 mb-xl-0">
                 <div className="card-header">Profile Picture</div>
                 <div className="card-body text-center">
@@ -51,7 +58,7 @@ const Account: React.FC<AccountInterface> = (): JSX.Element => {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col-xl-8">
               {/* <div className="card mb-4">
                 <div className="card-header">Account Details</div>

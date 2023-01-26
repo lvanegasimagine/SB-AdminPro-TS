@@ -7,7 +7,8 @@ import { Loader } from "@/components/atoms";
 
 export const UserProvider = ({ children }: PropsWithChildren): JSX.Element => {
   const [user, setUser] = useState<any>(false);
-
+  const [reloadApp, setReloadApp] = useState<boolean>(false);
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log(user);
@@ -18,7 +19,7 @@ export const UserProvider = ({ children }: PropsWithChildren): JSX.Element => {
 
   if(user === false) return <Loader/>
 
-  return <UserContext.Provider value={{user, setUser}}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{user, setUser, reloadApp, setReloadApp}}>{children}</UserContext.Provider>;
 };
 
 export function useUserContext(){

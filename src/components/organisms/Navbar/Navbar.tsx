@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FiAlignLeft,
   FiBarChart,
@@ -9,69 +9,50 @@ import {
   FiSettings,
   FiUserPlus,
 } from "react-icons/fi";
-import "./styles/Navbar.css";
 import { NavLink } from "react-router-dom";
-import { UserContext } from "@/context";
-import { UserContextProvider } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 import { logOut, upload } from "@/services";
 import { useUserContext } from "@/provider";
 import moment from "moment";
-import 'moment-timezone';
-// moment.locale('es')
+import "moment-timezone";
+import "./styles/Navbar.css";
 export interface NavbarInterface {
   // setReloadApp: React.Dispatch<React.SetStateAction<undefined>>
 }
 
 const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
-
   const currentUser: any = useAuth();
-  const { user, setUser }: any = useUserContext();
-  const [photoURL, setPhotoURL] = useState('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png')
+  const { user, setUser, reloadApp }: any = useUserContext();
+  const [photoURL, setPhotoURL] = useState(
+    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+  );
   const [menu, setMenu] = useState<string>("sidebarToggle");
-  const [photo, setPhoto] = useState('null');
+  const [photo, setPhoto] = useState("null");
   const [notifications, setNotifications] = useState<boolean>(false);
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState("");
   const [loading, setLoading] = useState(false);
-
-
 
   useEffect(() => {
     (async () => {
       if (currentUser?.photoURL) {
-        await setPhotoURL(currentUser.photoURL);
+        setPhotoURL(currentUser.photoURL);
       }
     })();
-  }, [currentUser])
+    console.log(reloadApp)
+  }, [currentUser, reloadApp]);
 
   useEffect(() => {
     (async () => {
       if (currentUser?.emailVerified === false) {
         const dateCreate = moment(currentUser?.metadata?.creationTime);
-        setDate(dateCreate.format('dddd Do MMMM YYYY'))
+        setDate(dateCreate.tz("America/Managua").format("Do MMMM YYYY"));
         setNotifications(true);
       }
     })();
-  }, [currentUser])
-
-  console.log(date);
-
-
-  function handleChange(e: any) {
-    if (e.target.files[0]) {
-      setPhoto(e.target.files[0])
-    }
-  }
-
-  function handleClick() {
-    upload(photo, currentUser, setLoading).then(() => {
-      setLoading(false);
-      setUser(!user);
-    })
-  }
+  }, [currentUser]);
 
   const handleLogout = async () => {
-    await logOut()
+    await logOut();
   };
 
   return (
@@ -108,37 +89,43 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
       </form>
       <ul className="navbar-nav align-items-center ms-auto">
         <li className="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
-          <a type="button" className="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts"
+          <a
+            type="button"
+            className="btn btn-icon btn-transparent-dark dropdown-toggle"
+            id="navbarDropdownAlerts"
             role="button"
             data-bs-toggle="dropdown"
-            aria-haspopup="true">
+            aria-haspopup="true"
+          >
             <FiBell />
-            {notifications &&
+            {notifications && (
               <span className="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
                 1+
                 <span className="visually-hidden">unread messages</span>
               </span>
-            }
+            )}
           </a>
           <div
             className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
             aria-labelledby="navbarDropdownAlerts"
           >
-            {notifications &&
+            {notifications && (
               <>
                 <h6 className="dropdown-header dropdown-notifications-header">
                   <FiBell color="#fff" className="me-2" />
                   Alerts Center
                 </h6>
 
-                <a className="dropdown-item dropdown-notifications-item" href="#!">
+                <a
+                  className="dropdown-item dropdown-notifications-item"
+                  href="#!"
+                >
                   <div className="dropdown-notifications-item-icon bg-warning">
                     <FiMail />
                   </div>
                   <div className="dropdown-notifications-item-content">
                     <div className="dropdown-notifications-item-content-details">
                       {date}
-                      {/* Confirmar Correo Electronico */}
                     </div>
                     <div className="dropdown-notifications-item-content-text">
                       Verifica Tu Email.
@@ -146,7 +133,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
                   </div>
                 </a>
               </>
-            }
+            )}
             {/* <a className="dropdown-item dropdown-notifications-item" href="#!">
               <div className="dropdown-notifications-item-icon bg-info">
                 <FiBarChart />
@@ -317,25 +304,21 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <img
-              className="img-fluid"
-              src={photoURL}
-            />
+            <img className="img-fluid" src={photoURL} />
           </a>
           <div
             className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
             aria-labelledby="navbarDropdownUserImage"
           >
             <h6 className="dropdown-header d-flex align-items-center">
-              <img
-                className="dropdown-user-img"
-                src={photoURL}
-              />
+              <img className="dropdown-user-img" src={photoURL} />
               <div className="dropdown-user-details">
-                <div className="dropdown-user-details-name">{user ? user.displayName : 'Valerie Luna'}</div>
-                <div className="dropdown-user-details-email">{user ? user.email : 'vluna@aol.com'}</div>
-                <input type="file" onChange={handleChange} />
-                <button disabled={loading || !photo} onClick={handleClick}>Upload</button>
+                <div className="dropdown-user-details-name">
+                  {user ? user.displayName : "Valerie Luna"}
+                </div>
+                <div className="dropdown-user-details-email">
+                  {user ? user.email : "vluna@aol.com"}
+                </div>
               </div>
             </h6>
             <div className="dropdown-divider"></div>
