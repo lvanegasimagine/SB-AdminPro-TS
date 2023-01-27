@@ -21,6 +21,16 @@ export interface ILoginValues {
   password: string;
 }
 
+export interface IUserUpdateAccount {
+  firstName: string;
+  lastName: string;
+  organization: string;
+  location: string;
+  phoneNumber: string;
+  birthday: string;
+  identityCard: string;
+}
+
 export interface IActionsForms {
   resetForm: () => void;
   setErrors: (err: { email?: string; password?: string }) => void;

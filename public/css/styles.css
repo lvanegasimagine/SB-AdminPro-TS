@@ -20196,7 +20196,8 @@ body {
 }
 
 .img-account-profile {
-  height: 10rem;
+  height: 250px;
+  width: 300px
 }
 
 .cc-color-visa {

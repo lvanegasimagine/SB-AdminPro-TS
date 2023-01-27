@@ -1,15 +1,13 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Form, Formik } from "formik";
-import { UserContext } from "@/context";
-import { UserContextProvider } from "@/types";
 import { login, loginWithGoogle } from "@/services";
 import { IActionsForms, ILoginValues } from "@/interface";
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from "react-icons/fa";
-import * as Yup from "yup";
-import "./styles/Login.css";
 import FormikControl from "@/formik/FormikControl";
+import * as Yup from "yup";
 import { useUserContext } from "@/provider";
+import "./styles/Login.css";
 
 export interface LoginInterface {}
 

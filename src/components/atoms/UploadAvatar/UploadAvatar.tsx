@@ -8,14 +8,36 @@ const UploadAvatar = ({ user, setUser, setReloadApp }: any) => {
 
   const onDrop = useCallback((acceptedFiles: any) => {
     const file = acceptedFiles[0];
-    setAvatarURL(URL.createObjectURL(file));
-    uploadImage(file);
+    if (
+      file?.type === "image/png" ||
+      file?.type === "image/jpg" ||
+      file?.type === "image/jpeg"
+    ) {
+      setAvatarURL(URL.createObjectURL(file));
+      uploadImage(file);
+    }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    noKeyboard: true,
-    onDrop,
-  });
+  const { getRootProps, fileRejections, getInputProps, isDragActive } =
+    useDropzone({
+      accept: {
+        "image/jpeg": [".jpeg"],
+        "image/jpg": [".jpg"],
+        "image/png": [".png"],
+      },
+      noKeyboard: true,
+      onDrop,
+    });
+
+  const fileRejectionItems = fileRejections.map(({ file, errors }: any) => (
+    <div key={file.path}>
+      {errors.map((e: any) => (
+        <div className="alert alert-danger" role="alert" key={e.code}>
+          {e.message}
+        </div>
+      ))}
+    </div>
+  ));
 
   const uploadImage = (file: File) => {
     if (!file) {
@@ -50,9 +72,9 @@ const UploadAvatar = ({ user, setUser, setReloadApp }: any) => {
           <div className="small font-italic text-muted mb-4">
             JPG or PNG no larger than 5 MB components
           </div>
-          {/* <button className="btn btn-primary" type="button">
-            Upload new image
-          </button> */}
+          <div className="small font-italic text-muted mb-4">
+            {fileRejectionItems}
+          </div>
         </div>
       </div>
     </div>
