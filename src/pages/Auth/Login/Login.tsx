@@ -97,7 +97,6 @@ const Login: React.FC<LoginInterface> = (): JSX.Element => {
                               required
                             />
                           </div>
-
                           <div className="mb-3">
                             <NavLink className="small" to="forgot-password">
                               Forgot your password?

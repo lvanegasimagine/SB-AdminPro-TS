@@ -9,6 +9,10 @@ import {
   signInWithPopup,
   signOut,
   sendPasswordResetEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+  deleteUser
 } from "firebase/auth";
 
 export const login = ({ email, password }: IUserLogin) =>
@@ -17,6 +21,22 @@ export const login = ({ email, password }: IUserLogin) =>
 export const register = ({ email, password }: IUserRegister) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };
+
+export const reauthenticate = (password: string) => {
+  const user: any = auth.currentUser;
+
+  const credentials = EmailAuthProvider.credential(user?.email, password);
+
+  return reauthenticateWithCredential(user, credentials);
+}
+
+export const changePassword = (user: any,password: string) => {
+  return updatePassword(user, password)
+}
+
+export const deleteAccountUser = (uid: string) => {
+  
+}
 
 export const changeUserName = (auth: any, displayName: string) => {
   return updateProfile(auth.currentUser, {

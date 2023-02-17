@@ -1,150 +1,170 @@
-import React from "react";
+import {
+  IActionsForms,
+  IUserUpdateAccount,
+} from "@/interface";
+import { Form, Formik } from "formik";
 import FormikControl from "@/formik/FormikControl";
-import * as Yup from 'yup';
+import { useUserContext } from "@/provider";
+import * as Yup from "yup";
 import "./styles/AccountDetail.css";
-import { IUserUpdateAccount } from "@/interface";
 
-
-export interface AccountDetailInterface {}
-
-const AccountDetail: React.FC<AccountDetailInterface> = () => {
+const AccountDetail = (): JSX.Element => {
+  const { user }: any = useUserContext();
+  let arr = user?.displayName.split(" ");
 
   const initialValues: IUserUpdateAccount = {
-	firstName: '',
-	lastName: '',
-	organization: '',
-	location: '',
-	phoneNumber: '',
-	birthday: '',
-	identityCard: ''
-  }
+    firstName: arr.length === 4 ? `${arr[0]} ${arr[1]}` : arr[0],
+    lastName: arr.length === 4 ? `${arr[2]} ${arr[3]}` : arr[1],
+    email: user?.email,
+  };
 
   const validationSchema = Yup.object().shape({
-	firstName: Yup.string().required().min(6).max(20).required('First Name is Required'),
-	lastName: Yup.string().required().min(6).max(20).required('Last Name is Required'),
-	organization: Yup.string().required().max(20).required('Organization is Required'),
-	location: Yup.string().required().max(150).nullable(),
-	phoneNumber: Yup.string().required().max(10).trim().nullable(),
-	birthday: Yup.date().nullable().min(new Date(1900, 0, 1)),
+    firstName: Yup.string(),
+    lastName: Yup.string(),
+    email: Yup.string(),
+  });
 
-  })
-
+  const onSubmit = (
+    { firstName, lastName, email }: IUserUpdateAccount,
+    { resetForm, setSubmitting }: IActionsForms
+  ) => {
+    try {
+    } catch (err: any) {
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="card mb-4">
       <div className="card-header">Account Details</div>
       <div className="card-body">
-        <form>
-          {/* <div className="mb-3">
-            <label className="small mb-1" htmlFor="inputUsername">
-              Username (how your name will appear to other users on the site)
-            </label>
-            <input
-              className="form-control"
-              id="inputUsername"
-              type="text"
-              placeholder="Enter your username"
-              value="username"
-            />
-          </div> */}
-          <div className="row gx-3 mb-3">
-            <div className="col-md-6">
-              <label className="small mb-1" htmlFor="inputFirstName">
-                First name
-              </label>
-              <input
-                className="form-control"
-                id="inputFirstName"
-                type="text"
-                placeholder="Enter your first name"
-                value="Valerie"
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="small mb-1" htmlFor="inputLastName">
-                Last name
-              </label>
-              <input
-                className="form-control"
-                id="inputLastName"
-                type="text"
-                placeholder="Enter your last name"
-                value="Luna"
-              />
-            </div>
-          </div>
-          <div className="row gx-3 mb-3">
-            <div className="col-md-6">
-              <label className="small mb-1" htmlFor="inputOrgName">
-                Organization name
-              </label>
-              <input
-                className="form-control"
-                id="inputOrgName"
-                type="text"
-                placeholder="Enter your organization name"
-                value="Start Bootstrap"
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="small mb-1" htmlFor="inputLocation">
-                Location
-              </label>
-              <input
-                className="form-control"
-                id="inputLocation"
-                type="text"
-                placeholder="Enter your location"
-                value="San Francisco, CA"
-              />
-            </div>
-          </div>
-          <div className="mb-3">
-            <label className="small mb-1" htmlFor="inputEmailAddress" >
-              Email address
-            </label>
-            <input
-              className="form-control"
-              id="inputEmailAddress"
-              type="email"
-              placeholder="Enter your email address"
-              value="name@example.com"
-			  disabled
-            />
-          </div>
-          <div className="row gx-3 mb-3">
-            <div className="col-md-6">
-              <label className="small mb-1" htmlFor="inputPhone">
-                Phone number
-              </label>
-              <input
-                className="form-control"
-                id="inputPhone"
-                type="tel"
-                placeholder="Enter your phone number"
-                value="555-123-4567"
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="small mb-1" htmlFor="inputBirthday">
-                Birthday
-              </label>
-              <input
-                className="form-control"
-                id="inputBirthday"
-                type="text"
-                name="birthday"
-                placeholder="Enter your birthday"
-                value="06/10/1988"
-              />
-            </div>
-          </div>
-          <button className="btn btn-primary" type="button">
-            Save changes
-          </button>
-        </form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ handleSubmit, isSubmitting }) => (
+            <Form onSubmit={handleSubmit}>
+              <div className="row gx-3 mb-3">
+                <div className="col-md-6">
+                  <FormikControl
+                    control="InputField"
+                    type="text"
+                    label="First Name"
+                    name="firstName"
+                    required
+                    flag={true}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <FormikControl
+                    control="InputField"
+                    type="text"
+                    label="Last Name"
+                    name="lastName"
+                    required
+                    flag={true}
+                  />
+                </div>
+              </div>
+              <div className="mb-3">
+                <FormikControl
+                  control="InputField"
+                  type="email"
+                  label="Email Address"
+                  name="email"
+                  required
+                  flag={true}
+                />
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
 };
 
 export default AccountDetail;
+
+// function ChangePasswordForm() {
+//   const initialValues: IChangePasswordUser = {
+//     currentPassword: "",
+//     newPassword: "",
+//     repeatPassword: "",
+//   };
+
+//   const validationSchema = Yup.object().shape({
+//     password: Yup.string().trim().min(6).required(),
+//     newPassword: Yup.string().trim().min(6).required(),
+//     confirmPassword: Yup.string()
+//       .trim()
+//       .min(6)
+//       .required()
+//       .label("confirm password")
+//       .required()
+//       .oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
+//   });
+
+//   const onSubmit = (
+//     {currentPassword}: any
+//   ) => {
+//     console.log(currentPassword);
+//   };
+
+//   return (
+//     <Formik
+//       initialValues={initialValues}
+//       validationSchema={validationSchema}
+//       onSubmit={onSubmit}
+//     >
+//       {({ handleSubmit, isSubmitting }) => (
+//         <Form onSubmit={handleSubmit}>
+//           <div className="mb-3">
+//             <FormikControl
+//               control="InputField"
+//               type="text"
+//               label="Contraseña Actual"
+//               name="currentPassword"
+//               required
+//             />
+//           </div>
+//           <div className="mb-3">
+//             <FormikControl
+//               control="InputField"
+//               type="text"
+//               label="Nueva Contraseña"
+//               name="newPassword"
+//               required
+//             />
+//           </div>
+//           <div className="mb-3">
+//             <FormikControl
+//               control="InputField"
+//               type="text"
+//               label="Confirmar Contraseña"
+//               name="repeatPassword"
+//               required
+//             />
+//           </div>
+//           <div className="modal-footer">
+//             <button
+//               type="button"
+//               className="btn btn-secondary"
+//               data-bs-dismiss="modal"
+//             >
+//               Cerrar
+//             </button>
+//             <button
+//               type="submit"
+//               className="btn btn-primary"
+//               disabled={isSubmitting}
+//             >
+//               Actualizar
+//             </button>
+//           </div>
+//         </Form>
+//       )}
+//     </Formik>
+//   );
+// }

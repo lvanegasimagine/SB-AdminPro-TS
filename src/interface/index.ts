@@ -1,3 +1,5 @@
+import { User } from "firebase/auth";
+
 export interface IUserLogin {
   email: string;
   password: string;
@@ -24,17 +26,25 @@ export interface ILoginValues {
 export interface IUserUpdateAccount {
   firstName: string;
   lastName: string;
-  organization: string;
-  location: string;
-  phoneNumber: string;
-  birthday: string;
-  identityCard: string;
+  email: string;
+}
+
+export interface IChangePasswordUser {
+  currentPassword: string;
+  newPassword: string;
+  repeatPassword: string;
 }
 
 export interface IActionsForms {
   resetForm: () => void;
   setErrors: (err: { email?: string; password?: string }) => void;
   setSubmitting: (err: boolean) => void;
+}
+
+export interface propsWithUserContext {
+  user: User | any;
+  setUser: (value: boolean) => boolean;
+  setReloadApp: (value: boolean) => boolean;
 }
 
 export interface propsWithFieldFormik {

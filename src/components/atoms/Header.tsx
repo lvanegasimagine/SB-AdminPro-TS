@@ -1,30 +1,48 @@
-import { ReactNode, PropsWithChildren } from 'react'
-import { FiGlobe, FiUser, FiUsers} from 'react-icons/fi'
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-const Header = ({children}: PropsWithChildren): JSX.Element => {
+const Header = ({
+  icon,
+  title,
+}: {
+  icon: string;
+  title: string;
+}): JSX.Element => {
+  let location = useLocation();
+  const [route, setRoute] = useState<string>("");
+
+  useEffect(() => {
+    const arr = location.pathname.split("/").slice(-1);
+    setRoute(arr[0].charAt(0).toUpperCase() + arr[0].slice(1));
+  }, [location]);
+
   return (
     <header className="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
       <div className="container-fluid px-4">
         <div className="page-header-content">
           <div className="row align-items-center justify-content-between pt-3">
             <div className="col-auto mb-3">
-              {children}
+              <h1 className="page-header-title">
+                <div className="page-header-icon">
+                  <i className={icon}></i>
+                </div>
+                {title} - {route}
+              </h1>
             </div>
             <div className="col-12 col-xl-auto mb-3">
-              <a className="btn btn-sm btn-light text-primary">
-                <FiUser className="me-1" />
+              {/* <button className="btn btn-sm btn-light text-primary">
+                <i
+                  className="bi-person"
+                  style={{ fontSize: "1rem", marginRight: "0.2rem" }}
+                ></i>
                 Manage Users
-              </a>
-              {/* <a className="btn btn-sm btn-light text-primary">
-                <FiUsers className="me-1" />
-                Manage Groups
-              </a> */}
+              </button> */}
             </div>
           </div>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

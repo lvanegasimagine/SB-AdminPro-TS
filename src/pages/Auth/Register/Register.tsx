@@ -16,11 +16,12 @@ import {
 import { auth } from "@/firebase/FirebaseConfig";
 import "./styles/Register.css";
 import FormikControl from "@/formik/FormikControl";
+import { useUserContext } from "@/provider";
 
 export interface RegisterInterface {}
 
 const Register: React.FC<RegisterInterface> = (): JSX.Element => {
-  const { user, setUser } = useContext(UserContext) as UserContextProvider;
+  const { user, setUser } = useUserContext();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);

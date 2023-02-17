@@ -1,3 +1,4 @@
+import { useUserContext } from "@/provider";
 import React from "react";
 import { FiActivity, FiBell } from "react-icons/fi";
 import { NavLink, Outlet } from "react-router-dom";
@@ -6,6 +7,9 @@ import "./styles/Sidebar.css";
 export interface SidebarInterface {}
 
 const Sidebar: React.FC<SidebarInterface> = () => {
+
+  const { user }: any = useUserContext();
+
   return (
     <>
       <div id="layoutSidenav">
@@ -64,7 +68,7 @@ const Sidebar: React.FC<SidebarInterface> = () => {
                       </span>
                     </NavLink>
                     <NavLink className="nav-link" to="dashboard-3">
-                      Dashboard 3
+                      Empleados
                     </NavLink>
                   </nav>
                 </div>
@@ -73,7 +77,7 @@ const Sidebar: React.FC<SidebarInterface> = () => {
             <div className="sidenav-footer">
               <div className="sidenav-footer-content">
                 <div className="sidenav-footer-subtitle">Logged in as:</div>
-                <div className="sidenav-footer-title">Valerie Luna</div>
+                <div className="sidenav-footer-title">{user?.displayName}</div>
               </div>
             </div>
           </nav>

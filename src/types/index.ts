@@ -6,7 +6,7 @@ export type TUserContext = [
 ];
 
 export type UserContextProvider = {
-  user: Auth | {};
+  user: Auth | {} | any;
   reloadApp: boolean;
   setUser: (value: boolean) => boolean;
   setReloadApp: (value: boolean) => boolean;

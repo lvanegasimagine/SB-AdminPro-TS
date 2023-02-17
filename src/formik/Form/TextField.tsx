@@ -2,7 +2,7 @@ import { propsWithFieldFormik } from "@/interface";
 import { Field } from "formik";
 
 const TextField = (props: any) => {
-  const { name, label, type } = props;
+  const { name, label, type, flag, value } = props;
 
   return (
     <Field name={name}>
@@ -19,6 +19,8 @@ const TextField = (props: any) => {
             className={meta.touched && meta.error ? "form-control form-control-solid is-invalid": "form-control form-control-solid"}
             aria-label={label}
             aria-describedby={name}
+            disabled={flag}
+            value={value}
             {...field}
           />
           {meta.touched && meta.error && (

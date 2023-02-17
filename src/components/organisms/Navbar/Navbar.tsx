@@ -72,7 +72,7 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
       </button>
 
       <NavLink className="navbar-brand pe-3 ps-4 ps-lg-2" to="/">
-        SB Admin Pro
+        Corasco S.A
       </NavLink>
       <form className="form-inline me-auto d-none d-lg-block me-3">
         <div className="input-group input-group-joined input-group-solid">
@@ -322,11 +322,11 @@ const Navbar: React.FC<NavbarInterface> = (): JSX.Element => {
               </div>
             </h6>
             <div className="dropdown-divider"></div>
-            <NavLink className="dropdown-item" to="account">
+            <NavLink className="dropdown-item" to="account/profile">
               <div className="dropdown-item-icon">
                 <FiSettings />
               </div>
-              Account
+              Perfil
             </NavLink>
             <button className="dropdown-item" onClick={handleLogout}>
               <div className="dropdown-item-icon">

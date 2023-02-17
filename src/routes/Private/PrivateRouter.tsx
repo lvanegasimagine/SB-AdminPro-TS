@@ -1,18 +1,20 @@
 import App from "@/App";
+import { Modal } from "@/components/atoms";
 import {
   LayoutPublic,
   LayoutTwo,
   LayoutThree,
-  Account,
-  PrivateLayout
+  PrivateLayout,
 } from "@/components/organisms";
+import { Billing, LayoutAccount, Profile } from "@/components/organisms/Account";
+import { Security } from "@/components/organisms/Account";
 
 export const PrivateRouter = {
   path: "dashboard",
   element: <PrivateLayout />,
   children: [
     {
-      path: '/dashboard',
+      path: "/dashboard",
       element: <App />,
       children: [
         {
@@ -26,11 +28,26 @@ export const PrivateRouter = {
         {
           path: "dashboard-3",
           element: <LayoutThree />,
-        },{
+        },
+        {
           path: "account",
-          element: <Account />,
+          element: <Profile />,
+          children: [
+            {
+              path: 'profile',
+              element: <LayoutAccount/>
+            },
+            {
+              path: 'billing',
+              element: <Billing/>
+            },
+            {
+              path: 'security',
+              element: <Security/>
+            }
+          ]
         },
       ],
     },
   ],
-}
+};

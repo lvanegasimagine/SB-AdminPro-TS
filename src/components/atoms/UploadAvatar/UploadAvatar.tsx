@@ -1,12 +1,17 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Profile1 from "@/assets/profile-1.png";
 import { upload } from "@/services";
+import { propsWithUserContext } from "@/interface";
 
-const UploadAvatar = ({ user, setUser, setReloadApp }: any) => {
+const UploadAvatar = ({
+  user,
+  setUser,
+  setReloadApp,
+}: propsWithUserContext) => {
   const [avatarURL, setAvatarURL] = useState<string>(user.photoURL);
 
-  const onDrop = useCallback((acceptedFiles: any) => {
+  const onDrop = useCallback((acceptedFiles: any[]) => {
     const file = acceptedFiles[0];
     if (
       file?.type === "image/png" ||
@@ -29,15 +34,17 @@ const UploadAvatar = ({ user, setUser, setReloadApp }: any) => {
       onDrop,
     });
 
-  const fileRejectionItems = fileRejections.map(({ file, errors }: any) => (
-    <div key={file.path}>
-      {errors.map((e: any) => (
-        <div className="alert alert-danger" role="alert" key={e.code}>
-          {e.message}
-        </div>
-      ))}
-    </div>
-  ));
+  const fileRejectionItems = fileRejections.map(
+    ({ file, errors }: { file: File | any; errors: any }) => (
+      <div key={file.path}>
+        {errors.map((e: any) => (
+          <div className="alert alert-danger" role="alert" key={e.code}>
+            {e.message}
+          </div>
+        ))}
+      </div>
+    )
+  );
 
   const uploadImage = (file: File) => {
     if (!file) {

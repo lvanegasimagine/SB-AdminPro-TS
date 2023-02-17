@@ -1,5 +1,5 @@
 import React from "react";
-import { FiGlobe, FiUser } from "react-icons/fi";
+import { Header } from "@/components/atoms";
 import "./styles/LayoutThree.css";
 export interface LayoutThreeInterface {}
 
@@ -7,39 +7,14 @@ const LayoutThree: React.FC<LayoutThreeInterface> = () => {
   return (
     <>
       <main>
-        <header className="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-          <div className="container-fluid px-4">
-            <div className="page-header-content">
-              <div className="row align-items-center justify-content-between pt-3">
-                <div className="col-auto mb-3">
-                  <h1 className="page-header-title">
-                    <div className="page-header-icon">
-                      <FiGlobe />
-                    </div>
-                    Organization Details
-                  </h1>
-                </div>
-                <div className="col-12 col-xl-auto mb-3">
-                  <a className="btn btn-sm btn-light text-primary">
-                    <FiUser className="me-1" />
-                    Manage Users
-                  </a>
-                  <a className="btn btn-sm btn-light text-primary">
-                    <FiUser className="me-1" />
-                    Manage Groups
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Header icon=" bi-file-earmark-person-fill" title="Account Settings" />
         <div className="container-fluid px-4">
           <div className="card bg-gradient-primary-to-secondary mb-4">
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between">
                 <div className="me-3">
-                  <div className="small text-white-50">Organization Name:</div>
-                  <div className="h1 text-white">Start Bootstrap</div>
+                  <div className="small text-white-50">Organización:</div>
+                  <div className="h1 text-white">Corea y Asociados S.A</div>
                 </div>
                 <div className="text-white">20 Member(s)</div>
               </div>
@@ -47,9 +22,9 @@ const LayoutThree: React.FC<LayoutThreeInterface> = () => {
           </div>
           <div className="card">
             <div className="card-body">
-              <div className="small text-muted mb-2">Administrators:</div>
+              {/* <div className="small text-muted mb-2">Administrators:</div> */}
               <div className="row">
-                <div className="col-lg-4">
+                <div className="col-lg-4 pb-4">
                   <div className="d-flex align-items-center">
                     <div className="avatar avatar-lg">
                       <img
