@@ -1,13 +1,12 @@
 import App from "@/App";
-import { Modal } from "@/components/atoms";
 import {
   LayoutPublic,
   LayoutTwo,
-  LayoutThree,
   PrivateLayout,
+  LayoutEmpleado
 } from "@/components/organisms";
-import { Billing, LayoutAccount, Profile } from "@/components/organisms/Account";
-import { Security } from "@/components/organisms/Account";
+import { Billing, LayoutAccount, Profile, Security } from "@/components/organisms/Account";
+import { Empleado, EditarEmpleado, NuevoEmpleado } from "@/pages/Empleado";
 
 export const PrivateRouter = {
   path: "dashboard",
@@ -26,8 +25,22 @@ export const PrivateRouter = {
           element: <LayoutTwo />,
         },
         {
-          path: "dashboard-3",
-          element: <LayoutThree />,
+          path: "empleado",
+          element: <LayoutEmpleado />,
+          children: [
+            {
+              index: true,
+              element:<Empleado/>
+            },
+            {
+              path: "nuevo",
+              element: <NuevoEmpleado/>
+            },
+            {
+              path: "editar/:id",
+              element: <EditarEmpleado/>
+            }
+          ]
         },
         {
           path: "account",

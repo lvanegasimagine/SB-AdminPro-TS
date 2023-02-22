@@ -9,6 +9,7 @@ const Header = ({
   title: string;
 }): JSX.Element => {
   let location = useLocation();
+  console.log("🚀 ~ file: Header.tsx:12 ~ location:", location)
   const [route, setRoute] = useState<string>("");
 
   useEffect(() => {
