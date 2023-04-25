@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./styles/Departamento.css";
 import { Modal } from "@/components/atoms";
 
+
 export interface DepartamentoInterface { }
 
 interface iDepartamentoResponse {
@@ -18,12 +19,11 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
     iDepartamentoResponse[] | []
   >([]);
   const navigate = useNavigate();
-  const [modalDepartamento, setModalDepartamento] = useState('exampleModalCenter')
-  const [showModal, setShowModal] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
     listarDepartamento();
-  }, [modalDepartamento]);
+  }, []);
 
   const listarDepartamento = async () => {
     try {
@@ -37,9 +37,10 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
       console.log(error);
     }
   };
-  const handleOpen = () => setShowModal(true);
 
-  const handleClose = () => setShowModal(false);
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
 
   return (
     <div className="container-fluid px-4">
@@ -57,7 +58,7 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
       <div className="col-12 col-xl-auto mb-3">
         <button
           className="btn btn-primary text-primary justify-content-around text-white"
-          onClick={() => navigate('nuevo')}
+          onClick={handleOpen}
         >
           <i
             className="bi-person"
@@ -69,6 +70,7 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
           ></i>
           Nuevo Departamento
         </button>
+        {open && <Modal handleOpen={handleOpen} handleClose={handleClose} open={open} title="Nuevo Departamento" />}
       </div>
       <div className="card">
         <div className="card-body">
