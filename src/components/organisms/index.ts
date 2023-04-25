@@ -4,6 +4,7 @@ export * from './Account/Billing';
 export * from './Account/Profile';
 export * from './Account/Security';
 export * from './Account';
+export * from './LayoutDepartamento';
 export { default as Empleado } from './LayoutEmpleado/data/Empleado';
 export * from './LayoutEmpleado';
 export * from './LayoutPublic';

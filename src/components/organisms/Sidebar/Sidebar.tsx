@@ -31,12 +31,13 @@ const arrayRouteSidebar = [
   {
     header: "UI Toolkit",
     icon: <FiAirplay />,
-    title: "Cuba",
+    title: "Recursos-Humanos",
     routes: [
       { name: "Empleados", path: "empleado" },
+      { name: "Departamento", path: "departamento" },
       { name: "Pantalla 2", path: "dashboard-2" },
     ],
-  },
+  }
 ];
 
 const Sidebar: React.FC<SidebarInterface> = () => {

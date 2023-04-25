@@ -3,9 +3,16 @@ import {
   LayoutPublic,
   LayoutTwo,
   PrivateLayout,
-  LayoutEmpleado
+  LayoutEmpleado,
+  LayoutDepartamento,
 } from "@/components/organisms";
-import { Billing, LayoutAccount, Profile, Security } from "@/components/organisms/Account";
+import {
+  Billing,
+  LayoutAccount,
+  Profile,
+  Security,
+} from "@/components/organisms/Account";
+import { Departamento, EditarDepartamento, NuevoDepartamento } from "@/pages";
 import { Empleado, EditarEmpleado, NuevoEmpleado } from "@/pages/Empleado";
 
 export const PrivateRouter = {
@@ -30,35 +37,53 @@ export const PrivateRouter = {
           children: [
             {
               index: true,
-              element:<Empleado/>
+              element: <Empleado />,
             },
             {
               path: "nuevo",
-              element: <NuevoEmpleado/>
+              element: <NuevoEmpleado />,
             },
             {
               path: "editar/:id",
-              element: <EditarEmpleado/>
-            }
-          ]
+              element: <EditarEmpleado />,
+            },
+          ],
+        },
+        {
+          path: "departamento",
+          element: <LayoutDepartamento />,
+          children: [
+            {
+              index: true,
+              element: <Departamento />,
+            },
+            {
+              path: "nuevo",
+              element: <NuevoDepartamento />,
+            },
+            {
+              path: "editar/:id",
+              element: <EditarDepartamento />,
+            },
+          ],
         },
         {
           path: "account",
           element: <Profile />,
           children: [
             {
-              path: 'profile',
-              element: <LayoutAccount/>
+              path: "profile",
+              element: <LayoutAccount />,
             },
             {
-              path: 'billing',
-              element: <Billing/>
+              path: "billing",
+              element: <Billing />,
             },
             {
-              path: 'security',
-              element: <Security/>
-            }
-          ]
+              path: "security",
+              element: <Security />,
+            },
+          ],
         },
       ],
     },
