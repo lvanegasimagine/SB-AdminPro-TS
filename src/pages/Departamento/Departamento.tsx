@@ -1,8 +1,12 @@
 import { httpClient } from "@/axios/httpClient";
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { FooterModal, Modal } from "@/components/atoms";
+import { Form, Formik } from "formik";
+import FormikControl from "@/formik/FormikControl";
+import * as Yup from "yup";
 import "./styles/Departamento.css";
-import { Modal } from "@/components/atoms";
+import { IActionsForms, INewDepartament } from "@/interface";
 
 
 export interface DepartamentoInterface { }
@@ -18,29 +22,61 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
   const [departamento, setDepartamento] = useState<
     iDepartamentoResponse[] | []
   >([]);
-  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
-  useEffect(() => {
-    listarDepartamento();
-  }, []);
+  const initialValues: INewDepartament = {
+    name: "Informatica",
+    description: "Responsable de los equipos informaticos de la empresa",
+  };
 
-  const listarDepartamento = async () => {
-    try {
-      const {
-        data: { data },
-      } = await httpClient.get("/departamento");
-      if (data) {
-        setDepartamento(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    description: Yup.string().min(6).required("Description is required"),
+  });
+
+  const onSubmit = async (
+    { name, description }: INewDepartament,
+    { resetForm, setSubmitting }: IActionsForms
+  ) => {
+    console.log({ name, description })
   };
 
   const handleOpen = () => setOpen(true);
 
   const handleClose = () => setOpen(false);
+
+  const bodyContent = (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
+      {({ handleSubmit, isSubmitting }) => (
+        <Form onSubmit={handleSubmit}>
+          <div className="mb-4 pt-3">
+            <FormikControl
+              control="InputField"
+              type="text"
+              label="Nombre del Departamento"
+              name="name"
+              required
+            />
+          </div>
+          <div className="mb-5">
+            <FormikControl
+              control="InputField"
+              type="text"
+              label="Descripcion del Departamento"
+              name="description"
+              required
+            />
+          </div>
+          <FooterModal handleClose={handleClose} />
+        </Form>
+      )}
+    </Formik>
+  )
+
 
   return (
     <div className="container-fluid px-4">
@@ -70,7 +106,7 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
           ></i>
           Nuevo Departamento
         </button>
-        {open && <Modal handleOpen={handleOpen} handleClose={handleClose} open={open} title="Nuevo Departamento" />}
+        {open && <Modal handleClose={handleClose} open={open} title="Nuevo Departamento" body={bodyContent} />}
       </div>
       <div className="card">
         <div className="card-body">

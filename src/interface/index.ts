@@ -52,3 +52,8 @@ export interface propsWithFieldFormik {
   form?: any;
   meta: any;
 }
+
+export interface INewDepartament {
+  name: string;
+  description: string;
+}
