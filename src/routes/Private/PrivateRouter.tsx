@@ -12,7 +12,7 @@ import {
   Profile,
   Security,
 } from "@/components/organisms/Account";
-import { Departamento, EditarDepartamento, NuevoDepartamento } from "@/pages";
+import { Departamento, EditarDepartamento, ViewDepartament } from "@/pages";
 import { Empleado, EditarEmpleado, NuevoEmpleado } from "@/pages/Empleado";
 
 export const PrivateRouter = {
@@ -45,7 +45,7 @@ export const PrivateRouter = {
             },
             {
               path: "editar/:id",
-              element: <EditarEmpleado />,
+              element: <EditarEmpleado />
             },
           ],
         },
@@ -58,8 +58,8 @@ export const PrivateRouter = {
               element: <Departamento />,
             },
             {
-              path: "nuevo",
-              element: <NuevoDepartamento />,
+              path: "view/:id",
+              element: <ViewDepartament />,
             },
             {
               path: "editar/:id",

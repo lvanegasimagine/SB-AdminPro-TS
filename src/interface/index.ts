@@ -57,3 +57,17 @@ export interface INewDepartament {
   name: string;
   description: string;
 }
+export interface IEmployee {
+  __v:       number;
+  _id:       string;
+  address:   string;
+  createdAt: Date;
+  email:     string;
+  firstName: string;
+  hireDate:  Date;
+  lastName:  string;
+  phone:     string;
+  position:  string;
+  salary:    number;
+  updatedAt: Date;
+}

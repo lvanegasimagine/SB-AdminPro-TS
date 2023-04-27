@@ -1,28 +1,24 @@
-import { httpClient } from "@/axios/httpClient";
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FooterModal, Modal } from "@/components/atoms";
+import { useState } from 'react';
+import { ErrorMessage, FooterModal, Loader, Modal } from "@/components/atoms";
 import { Form, Formik } from "formik";
 import FormikControl from "@/formik/FormikControl";
+import { IActionsForms, INewDepartament } from "@/interface";
+import { useMutateDepartamento, useQueryDepartamento } from "@/hooks/useMutate";
+import { DepartamentItemScreen } from '@/components/organisms';
 import * as Yup from "yup";
 import "./styles/Departamento.css";
-import { IActionsForms, INewDepartament } from "@/interface";
-
 
 export interface DepartamentoInterface { }
 
-interface iDepartamentoResponse {
-  id: number;
-  nombre_departamento: String;
-  descripcion_departamento: String;
-  created_at: string;
-  updated_at: string;
-}
 const Departamento: React.FC<DepartamentoInterface> = () => {
-  const [departamento, setDepartamento] = useState<
-    iDepartamentoResponse[] | []
-  >([]);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+  const { mutate, isError, isLoading } = useMutateDepartamento();
+  const { data: departamentoList, isError: isErrorDepartament, isLoading: isLoadingDepartament } = useQueryDepartamento();
+
+  if (isLoadingDepartament) return <Loader />
+
+  if (isErrorDepartament) return <ErrorMessage />
 
   const initialValues: INewDepartament = {
     name: "Informatica",
@@ -35,10 +31,16 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
   });
 
   const onSubmit = async (
-    { name, description }: INewDepartament,
+    values: INewDepartament,
     { resetForm, setSubmitting }: IActionsForms
   ) => {
-    console.log({ name, description })
+    mutate(values, {
+      onSuccess: () => {
+        resetForm();
+        setSubmitting(false);
+        setOpen(false)
+      }
+    })
   };
 
   const handleOpen = () => setOpen(true);
@@ -71,12 +73,11 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
               required
             />
           </div>
-          <FooterModal handleClose={handleClose} />
+          <FooterModal handleClose={handleClose} isSubmitting={isSubmitting} />
         </Form>
       )}
     </Formik>
   )
-
 
   return (
     <div className="container-fluid px-4">
@@ -87,7 +88,7 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
               <div className="small text-white-50">Organización:</div>
               <div className="h1 text-white">Corea y Asociados S.A</div>
             </div>
-            <div className="text-white">{departamento.length} miembros</div>
+            <div className="text-white">{departamentoList.length} miembros</div>
           </div>
         </div>
       </div>
@@ -110,31 +111,22 @@ const Departamento: React.FC<DepartamentoInterface> = () => {
       </div>
       <div className="card">
         <div className="card-body">
-          {/* <div className="small text-muted mb-2">Administrators:</div> */}
-          <div className="row">
-            {departamento.map((empleados) => (
-              <div className="col-lg-4 pb-4" key={empleados.id}>
-                <div className="d-flex align-items-center">
-                  <div className="avatar avatar-lg">
-                    <img
-                      className="avatar-img img-fluid"
-                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${empleados.id}.png`}
-                    />
-                  </div>
-                  <div className="ms-3">
-                    <Link
-                      to={`editar/${empleados.id}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <div className="fs-4 text-dark fw-500">
-                        {empleados.nombre_departamento}
-                      </div>
-                    </Link>
-                    <div className="small text-muted">{empleados.descripcion_departamento}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="table-responsive">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Descripcion</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {departamentoList && departamentoList.map((departamento: any, index: number) =>
+                  <DepartamentItemScreen key={departamento._id} index={index} {...departamento} />
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

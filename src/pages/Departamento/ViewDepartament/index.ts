@@ -1,0 +1,1 @@
+export { default as ViewDepartament } from './ViewDepartament';

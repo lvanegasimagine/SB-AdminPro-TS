@@ -36,10 +36,6 @@ export default function BasicModal({ handleClose, open, title, body, footer, onS
 								<button className="btn-close" type="button" onClick={handleClose} aria-label="Close"></button>
 							</div>
 							<div className="modal-body">{body}</div>
-							{/* <div className="modal-footer">
-								<button className="btn btn-secondary" type="button" onClick={handleClose}>Close</button>
-								<button className="btn btn-primary" type="submit">Save changes</button>
-							</div> */}
 						</div>
 					</div>
 				</Container>

@@ -3,7 +3,6 @@ export * from './Auth/Login';
 export * from './Auth/Register';
 export * from './Auth';
 export * from './Departamento/EditarDepartamento';
-export * from './Departamento/NuevoDepartamento';
 export * from './Departamento';
 export * from './Empleado/EditarEmpleado';
 export * from './Empleado/NuevoEmpleado';
